@@ -11,11 +11,13 @@ export function HeroVisual() {
     <div className="relative aspect-[6/5] w-full">
       <Frame
         swatch={basket.swatch}
+        image={basket.image}
         className="absolute left-0 top-6 w-[58%] aspect-[5/4] rotate-[-3deg] shadow-xl"
         iconClassName="w-14 h-14"
       />
       <Frame
         swatch={box.swatch}
+        image={box.image}
         className="absolute right-0 top-0 w-[44%] aspect-square rotate-[4deg] shadow-xl"
         iconClassName="w-12 h-12"
       />
@@ -36,6 +38,7 @@ export function HeroVisual() {
       />
       <Frame
         swatch={candle.swatch}
+        image={candle.image}
         className="absolute right-[32%] top-[38%] w-[22%] aspect-square rotate-[6deg] shadow-lg hidden sm:flex"
         iconClassName="w-7 h-7"
       />

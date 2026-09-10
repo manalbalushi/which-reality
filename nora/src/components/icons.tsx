@@ -166,6 +166,48 @@ export function CategoryIcon({ name, className, style }: Props) {
           <path d="M12 9C9 9 8 4 12 4c4 0 3 5 0 5Z" />
         </svg>
       );
+    case "toy":
+      return (
+        <svg {...props}>
+          <circle cx="9" cy="9" r="3.2" />
+          <circle cx="15" cy="9" r="3.2" />
+          <path d="M7 12.5c0 4 2 6.5 5 6.5s5-2.5 5-6.5" />
+          <path d="M9.5 9.5c.5.4 1 .4 1.5 0M13 9.5c.5.4 1 .4 1.5 0" />
+        </svg>
+      );
+    case "mug":
+      return (
+        <svg {...props}>
+          <path d="M5 8h11v7a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V8Z" />
+          <path d="M16 10h1.5a2.2 2.2 0 0 1 0 4.4H16" />
+          <path d="M8 5c0-1 .8-1 .8-2M12 5c0-1 .8-1 .8-2" />
+        </svg>
+      );
+    case "lantern":
+      return (
+        <svg {...props}>
+          <path d="M9 4h6M10 4v2.5h4V4" />
+          <path d="M8 6.5h8l1 3.5-1 7a2 2 0 0 1-2 1.7h-4a2 2 0 0 1-2-1.7l-1-7 1-3.5Z" />
+          <path d="M12 20v1.5" />
+          <path d="M9.5 10h5M9 13.5h6" />
+        </svg>
+      );
+    case "cap":
+      return (
+        <svg {...props}>
+          <path d="M12 6 3 10l9 4 9-4-9-4Z" />
+          <path d="M7 12v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4" />
+          <path d="M21 10v5.5" />
+        </svg>
+      );
+    case "candy":
+      return (
+        <svg {...props}>
+          <path d="M8.5 9.5h7a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2Z" />
+          <path d="M6.5 10 3 8.5v6L6.5 13" />
+          <path d="M17.5 10 21 8.5v6L17.5 13" />
+        </svg>
+      );
     case "sparkle":
     default:
       return (

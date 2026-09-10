@@ -15,13 +15,20 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <div className="group flex flex-col">
       <Link href={`/shop/${product.slug}`} className="block">
-        <Frame swatch={product.swatch} className="aspect-[4/5] w-full card-hover" iconClassName="w-10 h-10" />
+        <Frame
+          swatch={product.swatch}
+          image={product.image}
+          alt={text(product.name)}
+          className="aspect-[4/5] w-full card-hover"
+          iconClassName="w-10 h-10"
+        />
       </Link>
       <div className="mt-3 flex items-start justify-between gap-2">
-        <div>
+        <div className="min-w-0">
           <Link href={`/shop/${product.slug}`} className="font-serif text-[15px] leading-snug hover:text-taupe">
             {text(product.name)}
           </Link>
+          <p className="mt-0.5 text-xs text-charcoal-soft line-clamp-1">{text(product.description)}</p>
           <p className="mt-1 text-sm text-charcoal-soft">{formatOMR(product.price, locale)}</p>
         </div>
         <button

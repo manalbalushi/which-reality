@@ -92,4 +92,32 @@ export const occasions: Occasion[] = [
     blurb: { en: "Branded gifting for business", ar: "هدايا مؤسسية بعلامتكم" },
     swatch: { from: "#eceef2", to: "#ccd3e0", accent: "#2f3b52", icon: "box" },
   },
+  {
+    id: "graduation",
+    slug: "graduation",
+    name: { en: "Graduation", ar: "التخرج" },
+    blurb: { en: "Celebrate the achievement", ar: "احتفلي بهذا الإنجاز" },
+    swatch: { from: "#eaeef4", to: "#b7c3d9", accent: "#243a5e", icon: "cap" },
+  },
+  {
+    id: "qaranqashouh",
+    slug: "qaranqashouh",
+    name: { en: "Qaranqashouh", ar: "قرنقشوه" },
+    blurb: { en: "Sweet giveaways for the little ones", ar: "توزيعات لذيذة للصغار" },
+    swatch: { from: "#fbf0e2", to: "#f0cf94", accent: "#8a5a12", icon: "candy" },
+  },
+  {
+    id: "school-event",
+    slug: "school-event",
+    name: { en: "School Event", ar: "فعالية مدرسية" },
+    blurb: { en: "Favors for classrooms and school days", ar: "توزيعات للفصول والأيام المدرسية" },
+    swatch: { from: "#eaf0ee", to: "#bcd4c9", accent: "#26503f", icon: "stationery" },
+  },
+  {
+    id: "majlis",
+    slug: "majlis",
+    name: { en: "Majlis", ar: "مجلس" },
+    blurb: { en: "Gracious gifting for gatherings", ar: "هدايا راقية للمجالس" },
+    swatch: { from: "#f3ede0", to: "#dcc190", accent: "#5c431c", icon: "omani" },
+  },
 ];

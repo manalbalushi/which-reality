@@ -50,7 +50,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
       </nav>
 
       <div className="grid lg:grid-cols-2 gap-12">
-        <Frame swatch={product.swatch} className="aspect-square w-full" iconClassName="w-20 h-20" />
+        <Frame swatch={product.swatch} image={product.image} alt={text(product.name)} className="aspect-square w-full" iconClassName="w-20 h-20" />
 
         <div>
           {product.badge && (
@@ -77,6 +77,8 @@ export function ProductDetailClient({ product }: { product: Product }) {
                   >
                     <Frame
                       swatch={p.swatch}
+                      image={p.image}
+                      alt={text(p.name)}
                       className={`w-20 h-20 border-2 ${
                         packagingId === p.id ? "border-charcoal" : "border-transparent"
                       }`}

@@ -1,4 +1,5 @@
 import { Packaging } from "@/lib/types";
+import { stockImages } from "@/lib/stock-images";
 
 export const packagingTypes: Packaging[] = [
   {
@@ -11,6 +12,7 @@ export const packagingTypes: Packaging[] = [
     },
     price: 3,
     swatch: { from: "#f3ece2", to: "#dfc6a6", accent: "#7a5a34", icon: "bag" },
+    image: stockImages.packagingGiftBag,
   },
   {
     id: "basket",
@@ -22,6 +24,7 @@ export const packagingTypes: Packaging[] = [
     },
     price: 6,
     swatch: { from: "#f1e9db", to: "#d9bd8e", accent: "#6c4c22", icon: "basket" },
+    image: stockImages.packagingBasket,
   },
   {
     id: "tote-bag",
@@ -55,6 +58,7 @@ export const packagingTypes: Packaging[] = [
     },
     price: 4,
     swatch: { from: "#efe6d8", to: "#d8b98a", accent: "#5c4322", icon: "box" },
+    image: stockImages.packagingGiftBox,
   },
   {
     id: "luxury-tray",

@@ -7,16 +7,15 @@ import { useCart } from "@/lib/cart-context";
 import { formatOMR } from "@/lib/format";
 import { UIIcon } from "@/components/icons";
 import { Frame } from "@/components/media";
-import { PackagingCard } from "@/components/packaging-card";
 import { recipients, styles, budgetTiers, builderOccasionIds, quantityTiers, bulkBudgetTiers } from "@/data/styles";
 import { occasions } from "@/data/occasions";
 import { packagingTypes } from "@/data/packaging";
 import { categories } from "@/data/categories";
 import { products } from "@/data/products";
-import { recommendGift } from "@/lib/recommend";
+import { recommendThreeGifts, GiftRecommendation } from "@/lib/recommend";
 import { GiftStyle, Personalization } from "@/lib/types";
 
-const TOTAL_STEPS = 7;
+const TOTAL_STEPS = 8;
 
 function ChipButton({
   label,
@@ -88,17 +87,51 @@ export function BuilderClient() {
   // engine still reasons per single gift, so we divide it back down here.
   const perGiftBudget = budget ? (isBulk ? Math.max(5, Math.round((budget / quantity) * 1000) / 1000) : budget) : null;
 
-  const recommendation = useMemo(() => {
-    if (!recipient || !occasion || !perGiftBudget || !style) return null;
-    return recommendGift({ recipient, occasion, budget: perGiftBudget, style: style as GiftStyle });
+  const recommendations: GiftRecommendation[] = useMemo(() => {
+    if (!recipient || !occasion || !perGiftBudget || !style) return [];
+    return recommendThreeGifts({ recipient, occasion, budget: perGiftBudget, style: style as GiftStyle });
   }, [recipient, occasion, perGiftBudget, style]);
 
-  const applyRecommendation = () => {
-    if (!recommendation) return;
-    setPackagingId(recommendation.packaging.id);
+  const applyRecommendation = (rec: GiftRecommendation) => {
+    setPackagingId(rec.packaging.id);
     const next: Record<string, number> = {};
-    recommendation.products.forEach((p) => (next[p.id] = 1));
+    rec.products.forEach((p) => (next[p.id] = 1));
     setSelected(next);
+  };
+
+  const addRecommendationDirectly = (rec: GiftRecommendation) => {
+    applyRecommendation(rec);
+    addGiftBuild({
+      recipient,
+      occasion,
+      budget: budget ?? 0,
+      quantity,
+      style: style as GiftStyle,
+      packagingId: rec.packaging.id,
+      products: rec.products.map((p) => ({ productId: p.id, quantity: 1 })),
+      personalization,
+      unitPrice: rec.total,
+    });
+    setJustAdded(true);
+    setTimeout(() => router.push("/cart"), 700);
+  };
+
+  const customizeRecommendation = (rec: GiftRecommendation) => {
+    applyRecommendation(rec);
+    setStep(6);
+  };
+
+  const surpriseMe = () => {
+    const r = recipients[Math.floor(Math.random() * recipients.length)];
+    const o = builderOccasionIds[Math.floor(Math.random() * builderOccasionIds.length)];
+    const b = budgetTiers[Math.floor(Math.random() * (budgetTiers.length - 1)) + 1];
+    const s = styles[Math.floor(Math.random() * styles.length)];
+    setRecipient(r.id);
+    setOccasion(o);
+    setQuantity(1);
+    setBudget(b);
+    setStyle(s.id);
+    setStep(5);
   };
 
   const canContinue = () => {
@@ -106,8 +139,8 @@ export function BuilderClient() {
     if (step === 2) return !!occasion;
     if (step === 3) return !!budget;
     if (step === 4) return !!style;
-    if (step === 5) return !!packagingId;
-    if (step === 6) return itemCount > 0;
+    if (step === 6) return !!packagingId;
+    if (step === 7) return itemCount > 0;
     return true;
   };
 
@@ -153,12 +186,25 @@ export function BuilderClient() {
     `${t("nav_build")} — ${summaryLines.join(" · ")} · Total ${formatOMR(grandTotal * quantity, locale)}`
   );
 
+  const showGenericNav = step < 8 && step !== 5;
+
   return (
     <div className="container-nora py-10 sm:py-14">
-      <div className="max-w-2xl">
-        <p className="text-xs uppercase tracking-[0.3em] text-taupe mb-3">{t("nav_build")}</p>
-        <h1 className="font-serif text-4xl leading-tight">{t("build_teaser_title")}</h1>
-        <p className="mt-3 text-charcoal-soft">{t("build_teaser_sub")}</p>
+      <div className="max-w-2xl flex items-start justify-between gap-6 flex-wrap">
+        <div>
+          <p className="text-xs uppercase tracking-[0.3em] text-taupe mb-3">{t("nav_build")}</p>
+          <h1 className="font-serif text-4xl leading-tight">{t("build_teaser_title")}</h1>
+          <p className="mt-3 text-charcoal-soft">{t("you_choose_tagline")}</p>
+        </div>
+        {step < 5 && (
+          <button
+            onClick={surpriseMe}
+            className="inline-flex items-center gap-2 rounded-full border border-taupe px-5 py-2.5 text-xs uppercase tracking-wider text-taupe hover:bg-taupe hover:text-cream transition-colors shrink-0"
+          >
+            <UIIcon name="star" className="w-4 h-4" />
+            {t("surprise_me")}
+          </button>
+        )}
       </div>
 
       <div className="mt-8 flex items-center gap-2">
@@ -173,7 +219,7 @@ export function BuilderClient() {
         {t("step")} {step} {t("of")} {TOTAL_STEPS}
       </p>
 
-      <div className="mt-8 grid lg:grid-cols-[1fr_360px] gap-12">
+      <div className={step === 5 ? "mt-8" : "mt-8 grid lg:grid-cols-[1fr_360px] gap-12"}>
         <div>
           {step === 1 && (
             <div>
@@ -217,10 +263,11 @@ export function BuilderClient() {
 
               <p className="text-xs uppercase tracking-wider text-charcoal-soft mb-3">{t("quantity")}</p>
               <div className="flex flex-wrap gap-3">
+                <ChipButton label={t("single_gift")} selected={quantity === 1} onClick={() => setQuantity(1)} />
                 {quantityTiers.map((q) => (
                   <ChipButton
                     key={q}
-                    label={q === 1 ? t("single_gift") : `${q} ${t("gifts_suffix")}`}
+                    label={`${q} ${t("gifts_suffix")}`}
                     selected={quantity === q}
                     onClick={() => setQuantity(q)}
                   />
@@ -281,38 +328,41 @@ export function BuilderClient() {
           )}
 
           {step === 5 && (
+            <ResultsStep
+              recommendations={recommendations}
+              quantity={quantity}
+              style={style}
+              onCustomize={customizeRecommendation}
+              onAddToCart={addRecommendationDirectly}
+              onBack={() => setStep(4)}
+              justAdded={justAdded}
+            />
+          )}
+
+          {step === 6 && (
             <div>
-              <h2 className="font-serif text-2xl mb-5">{t("step5_title")}</h2>
-              {recommendation && (
-                <RecommendationCallout
-                  recommendation={recommendation}
-                  quantity={quantity}
-                  onApply={applyRecommendation}
-                />
-              )}
+              <h2 className="font-serif text-2xl mb-5">{t("step6_customize_packaging_title")}</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {packagingTypes.map((p) => (
-                  <PackagingCard
+                  <button
                     key={p.id}
-                    packaging={p}
-                    selected={packagingId === p.id}
-                    onSelect={() => setPackagingId(p.id)}
-                  />
+                    onClick={() => setPackagingId(p.id)}
+                    className={`text-start rounded-2xl border p-3 transition-colors ${
+                      packagingId === p.id ? "border-charcoal bg-beige/60" : "border-line hover:border-taupe"
+                    }`}
+                  >
+                    <Frame swatch={p.swatch} image={p.image} alt={text(p.name)} className="aspect-square w-full" iconClassName="w-10 h-10" />
+                    <p className="mt-3 font-serif text-[15px]">{text(p.name)}</p>
+                    <p className="mt-2 text-sm">+{formatOMR(p.price, locale)}</p>
+                  </button>
                 ))}
               </div>
             </div>
           )}
 
-          {step === 6 && (
+          {step === 7 && (
             <div>
-              <h2 className="font-serif text-2xl mb-5">{t("step6_title")}</h2>
-              {recommendation && (
-                <RecommendationCallout
-                  recommendation={recommendation}
-                  quantity={quantity}
-                  onApply={applyRecommendation}
-                />
-              )}
+              <h2 className="font-serif text-2xl mb-5">{t("step7_customize_products_title")}</h2>
               <div className="flex flex-wrap gap-2 mb-6">
                 <ChipButton label={t("all")} selected={category === "all"} onClick={() => setCategory("all")} />
                 {categories.map((c) => (
@@ -334,7 +384,7 @@ export function BuilderClient() {
                         qty > 0 ? "border-charcoal bg-beige/50" : "border-line"
                       }`}
                     >
-                      <Frame swatch={p.swatch} className="w-20 h-20 shrink-0" iconClassName="w-8 h-8" />
+                      <Frame swatch={p.swatch} image={p.image} alt={text(p.name)} className="w-20 h-20 shrink-0" iconClassName="w-8 h-8" />
                       <div className="flex-1 min-w-0">
                         <p className="font-serif text-sm leading-snug">{text(p.name)}</p>
                         <p className="text-xs text-charcoal-soft mt-1">
@@ -368,7 +418,7 @@ export function BuilderClient() {
             </div>
           )}
 
-          {step === 7 && (
+          {step === 8 && (
             <div>
               <h2 className="font-serif text-2xl mb-5">{t("step7_title")}</h2>
               <div className="grid gap-5 max-w-lg">
@@ -439,11 +489,11 @@ export function BuilderClient() {
             </div>
           )}
 
-          {step < 7 && (
+          {showGenericNav && (
             <div className="mt-10 flex items-center gap-3">
               {step > 1 && (
                 <button
-                  onClick={() => setStep((s) => s - 1)}
+                  onClick={() => setStep((s) => (s === 6 ? 5 : s - 1))}
                   className="rounded-full border border-line px-6 py-3 text-sm uppercase tracking-wider hover:bg-beige"
                 >
                   {t("back")}
@@ -460,71 +510,150 @@ export function BuilderClient() {
           )}
         </div>
 
-        <LivePreview
-          recipient={recipient}
-          occasion={occasion}
-          budget={budget}
-          quantity={quantity}
-          style={style}
-          packagingId={packagingId}
-          selected={selected}
-          personalization={personalization}
-          grandTotal={grandTotal}
-        />
+        {step !== 5 && (
+          <LivePreview
+            recipient={recipient}
+            occasion={occasion}
+            budget={budget}
+            quantity={quantity}
+            style={style}
+            packagingId={packagingId}
+            selected={selected}
+            personalization={personalization}
+            grandTotal={grandTotal}
+          />
+        )}
       </div>
     </div>
   );
 }
 
-function RecommendationCallout({
-  recommendation,
+function ResultsStep({
+  recommendations,
   quantity,
-  onApply,
+  style,
+  onCustomize,
+  onAddToCart,
+  onBack,
+  justAdded,
 }: {
-  recommendation: ReturnType<typeof recommendGift>;
+  recommendations: GiftRecommendation[];
   quantity: number;
-  onApply: () => void;
+  style: GiftStyle | "";
+  onCustomize: (rec: GiftRecommendation) => void;
+  onAddToCart: (rec: GiftRecommendation) => void;
+  onBack: () => void;
+  justAdded: boolean;
 }) {
-  const { t, text, locale } = useLocale();
-  const gallery = [
-    { swatch: recommendation.packaging.swatch, name: recommendation.packaging.name },
-    ...recommendation.products.map((p) => ({ swatch: p.swatch, name: p.name })),
-  ];
+  const { t, text } = useLocale();
+  const styleName = style ? text(styles.find((s) => s.id === style)!.name) : "";
 
-  return (
-    <div className="mb-6 rounded-2xl border border-taupe/50 bg-beige/40 p-5">
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <p className="text-xs uppercase tracking-wider text-taupe">{t("recommended_for_you")}</p>
-          <p className="text-sm text-charcoal-soft mt-1">{t("recommended_sub")}</p>
-        </div>
-        <button
-          onClick={onApply}
-          className="rounded-full bg-charcoal text-cream px-5 py-2 text-xs uppercase tracking-wider hover:bg-charcoal-soft"
-        >
-          {t("use_recommendation")}
+  if (recommendations.length === 0) {
+    return (
+      <div className="py-10 text-center text-charcoal-soft">
+        <button onClick={onBack} className="text-sm underline underline-offset-4">
+          {t("back")}
         </button>
       </div>
+    );
+  }
 
-      <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
-        {gallery.map((g, i) => (
-          <div key={i} className="shrink-0 w-16 text-center">
-            <Frame swatch={g.swatch} className="w-16 h-16" iconClassName="w-6 h-6" />
-            <p className="mt-1.5 text-[10.5px] leading-tight text-charcoal-soft">{text(g.name)}</p>
-          </div>
+  return (
+    <div>
+      <p className="text-xs uppercase tracking-[0.3em] text-taupe mb-3">{t("results_heading")}</p>
+      <h2 className="font-serif text-3xl mb-3">{t("results_heading")}</h2>
+      <p className="text-charcoal-soft max-w-lg mb-8">{t("results_sub")}</p>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {recommendations.map((rec) => (
+          <RecommendationCard
+            key={rec.id}
+            rec={rec}
+            quantity={quantity}
+            styleName={styleName}
+            onCustomize={() => onCustomize(rec)}
+            onAddToCart={() => onAddToCart(rec)}
+            justAdded={justAdded}
+          />
         ))}
       </div>
 
-      <div className="mt-3">
-        {quantity > 1 ? (
-          <span className="inline-block px-4 py-1.5 rounded-full bg-charcoal text-cream text-xs">
-            {formatOMR(recommendation.total, locale)} {t("per_gift")} × {quantity} = {formatOMR(recommendation.total * quantity, locale)}
-          </span>
-        ) : (
-          <span className="inline-block px-4 py-1.5 rounded-full bg-charcoal text-cream text-xs">
-            {formatOMR(recommendation.total, locale)}
+      <button onClick={onBack} className="mt-8 text-sm underline underline-offset-4 text-charcoal-soft hover:text-charcoal">
+        {t("edit_answers")}
+      </button>
+    </div>
+  );
+}
+
+function RecommendationCard({
+  rec,
+  quantity,
+  styleName,
+  onCustomize,
+  onAddToCart,
+  justAdded,
+}: {
+  rec: GiftRecommendation;
+  quantity: number;
+  styleName: string;
+  onCustomize: () => void;
+  onAddToCart: () => void;
+  justAdded: boolean;
+}) {
+  const { t, text, locale } = useLocale();
+  const isBulk = quantity > 1;
+  const name = `${styleName} ${text(rec.packaging.name)}`.trim();
+
+  return (
+    <div className="rounded-3xl border border-line bg-ivory overflow-hidden flex flex-col">
+      <div className="relative">
+        <Frame swatch={rec.packaging.swatch} image={rec.packaging.image} alt={name} className="aspect-[4/3] w-full rounded-none" iconClassName="w-14 h-14" />
+        {rec.label && (
+          <span className="absolute top-3 start-3 rounded-full bg-charcoal text-cream text-[10px] uppercase tracking-wider px-3 py-1.5">
+            {text(rec.label)}
           </span>
         )}
+      </div>
+      <div className="p-5 flex flex-col flex-1">
+        <p className="font-serif text-lg leading-snug">{name}</p>
+
+        <p className="mt-3 text-[11px] uppercase tracking-wider text-charcoal-soft">{t("includes")}</p>
+        <ul className="mt-1.5 space-y-1 text-sm text-charcoal-soft">
+          {rec.products.map((p) => (
+            <li key={p.id}>• {text(p.name)}</li>
+          ))}
+        </ul>
+
+        <div className="mt-auto pt-4">
+          <div className="flex items-baseline justify-between">
+            <span className="text-xs text-charcoal-soft">
+              {rec.products.length + 1} {t("items_word")}
+            </span>
+            <span className="font-serif text-xl">
+              {formatOMR(rec.total, locale)}
+              {isBulk && <span className="text-xs text-charcoal-soft"> × {quantity}</span>}
+            </span>
+          </div>
+          {isBulk && (
+            <p className="text-end text-xs text-charcoal-soft mt-0.5">
+              = {formatOMR(rec.total * quantity, locale)} {t("total").toLowerCase()}
+            </p>
+          )}
+          <div className="mt-4 flex gap-2">
+            <button
+              onClick={onCustomize}
+              className="flex-1 rounded-full border border-charcoal px-4 py-2.5 text-xs uppercase tracking-wider hover:bg-charcoal hover:text-cream transition-colors"
+            >
+              {t("customize")}
+            </button>
+            <button
+              onClick={onAddToCart}
+              className="flex-1 rounded-full bg-charcoal text-cream px-4 py-2.5 text-xs uppercase tracking-wider hover:bg-charcoal-soft transition-colors"
+            >
+              {justAdded ? "✓" : t("add_to_cart")}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -564,7 +693,7 @@ function LivePreview({
       <p className="text-xs uppercase tracking-wider text-charcoal-soft mb-4">{t("live_preview")}</p>
 
       {packaging ? (
-        <Frame swatch={packaging.swatch} className="aspect-[4/3] w-full mb-4" iconClassName="w-12 h-12" />
+        <Frame swatch={packaging.swatch} image={packaging.image} alt={text(packaging.name)} className="aspect-[4/3] w-full mb-4" iconClassName="w-12 h-12" />
       ) : (
         <div className="aspect-[4/3] w-full mb-4 rounded-2xl border border-dashed border-line flex items-center justify-center text-xs text-charcoal-soft">
           {t("packaging")}

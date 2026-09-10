@@ -12,6 +12,7 @@ const navItems = [
   { href: "/", key: "nav_home" as const },
   { href: "/shop", key: "nav_shop" as const },
   { href: "/build-your-gift", key: "nav_build" as const },
+  { href: "/giveaways", key: "nav_giveaways" as const },
   { href: "/occasions", key: "nav_occasions" as const },
   { href: "/corporate", key: "nav_corporate" as const },
 ];

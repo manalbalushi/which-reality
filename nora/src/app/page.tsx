@@ -38,6 +38,8 @@ export default function Home() {
               {t("hero_cta_build")}
             </LinkButton>
           </div>
+          <p className="mt-6 text-xs uppercase tracking-[0.2em] text-taupe">{t("you_choose_tagline")}</p>
+          <p className="mt-1.5 text-sm text-charcoal-soft italic">{t("personalized_tagline")}</p>
         </div>
         <HeroVisual />
       </section>
@@ -111,6 +113,29 @@ export default function Home() {
           </div>
           <LinkButton href="/corporate" variant="secondary" className="mt-8 self-start">
             {t("corporate_teaser_cta")}
+          </LinkButton>
+        </div>
+      </section>
+
+      <section className="container-nora pb-20 sm:pb-24 grid lg:grid-cols-2 gap-8">
+        <div className="rounded-3xl bg-ivory border border-line p-10 sm:p-14 flex flex-col justify-between min-h-[280px]">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-taupe mb-4">{t("nav_giveaways")}</p>
+            <h3 className="font-serif text-3xl leading-tight">{t("giveaways_teaser_title")}</h3>
+            <p className="mt-4 text-charcoal-soft max-w-sm">{t("giveaways_teaser_sub")}</p>
+          </div>
+          <LinkButton href="/giveaways" variant="secondary" className="mt-8 self-start">
+            {t("giveaways_teaser_cta")}
+          </LinkButton>
+        </div>
+        <div className="rounded-3xl bg-beige p-10 sm:p-14 flex flex-col justify-between min-h-[280px]">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-taupe mb-4">{t("nav_giveaways")}</p>
+            <h3 className="font-serif text-3xl leading-tight">{t("qaranqashouh_teaser_title")}</h3>
+            <p className="mt-4 text-charcoal-soft max-w-sm">{t("qaranqashouh_teaser_sub")}</p>
+          </div>
+          <LinkButton href="/giveaways/qaranqashouh" variant="secondary" className="mt-8 self-start">
+            {t("qaranqashouh_teaser_cta")}
           </LinkButton>
         </div>
       </section>

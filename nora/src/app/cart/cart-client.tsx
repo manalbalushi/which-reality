@@ -21,7 +21,7 @@ function CartRow({ item }: { item: CartItem }) {
     if (!product) return null;
     return (
       <div className="flex gap-4 py-6 border-b border-line">
-        <Frame swatch={product.swatch} className="w-24 h-24 shrink-0" iconClassName="w-9 h-9" />
+        <Frame swatch={product.swatch} image={product.image} alt={text(product.name)} className="w-24 h-24 shrink-0" iconClassName="w-9 h-9" />
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-3">
             <p className="font-serif">{text(product.name)}</p>
@@ -55,7 +55,7 @@ function CartRow({ item }: { item: CartItem }) {
   return (
     <div className="flex gap-4 py-6 border-b border-line">
       {packaging && (
-        <Frame swatch={packaging.swatch} className="w-24 h-24 shrink-0" iconClassName="w-9 h-9" />
+        <Frame swatch={packaging.swatch} image={packaging.image} alt={text(packaging.name)} className="w-24 h-24 shrink-0" iconClassName="w-9 h-9" />
       )}
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-3">

@@ -24,7 +24,7 @@ export function PackagingCard({
       }`}
     >
       <div className="relative">
-        <Frame swatch={packaging.swatch} className="aspect-square w-full" iconClassName="w-10 h-10" />
+        <Frame swatch={packaging.swatch} image={packaging.image} alt={text(packaging.name)} className="aspect-square w-full" iconClassName="w-10 h-10" />
         {selected && (
           <span className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-charcoal text-cream">
             <UIIcon name="check" className="w-3.5 h-3.5" />

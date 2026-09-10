@@ -35,7 +35,12 @@ export type IconName =
   | "box"
   | "tray"
   | "gift"
-  | "sparkle";
+  | "sparkle"
+  | "toy"
+  | "mug"
+  | "lantern"
+  | "cap"
+  | "candy";
 
 export interface Category {
   id: string;
@@ -60,7 +65,10 @@ export type GiftStyle =
   | "coffee"
   | "omani"
   | "cute"
-  | "executive";
+  | "executive"
+  | "elegant"
+  | "fun"
+  | "traditional";
 
 export interface StyleDef {
   id: GiftStyle;
@@ -79,7 +87,12 @@ export interface Packaging {
   description: LocalizedText;
   price: number;
   swatch: Swatch;
+  /** Real product photo URL; falls back to the illustrated swatch tile when absent or failing to load. */
+  image?: string;
 }
+
+export type Gender = "boy" | "girl" | "unisex";
+export type AgeGroup = "3-5" | "6-8" | "9-12" | "teen" | "adult";
 
 export interface Product {
   id: string;
@@ -94,6 +107,16 @@ export interface Product {
   stock: number;
   featured?: boolean;
   badge?: LocalizedText;
+  /** Real product photo URL; falls back to the illustrated swatch tile when absent or failing to load. */
+  image?: string;
+  /** Attributes used by the giveaway / Qaranqashouh recommendation engines. */
+  gender?: Gender;
+  ageGroups?: AgeGroup[];
+  themes?: string[];
+  minQuantity?: number;
+  bulkAvailable?: boolean;
+  personalizable?: boolean;
+  tags?: string[];
 }
 
 export interface Personalization {
@@ -103,6 +126,12 @@ export interface Personalization {
   companyLogo: boolean;
   customRibbon: boolean;
   personalizedTag: boolean;
+  /** Extra fields used by the giveaway / bulk-distribution personalization step. */
+  eventName?: string;
+  eventDate?: string;
+  theme?: string;
+  color?: string;
+  sticker?: boolean;
 }
 
 export interface CartLineProduct {

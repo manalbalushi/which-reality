@@ -1,4 +1,5 @@
 import { Product, Swatch } from "@/lib/types";
+import { stockImages } from "@/lib/stock-images";
 
 const sw = {
   beauty: { from: "#f9eee7", to: "#efd2bd", accent: "#8a5a34", icon: "beauty" } as Swatch,
@@ -15,6 +16,12 @@ const sw = {
   home: { from: "#f1ede6", to: "#d6c4a4", accent: "#54432a", icon: "home" } as Swatch,
   omani: { from: "#f4eee0", to: "#e0c583", accent: "#6b4d1a", icon: "omani" } as Swatch,
   baby: { from: "#eef2ee", to: "#c9dcc8", accent: "#3d5a3f", icon: "baby" } as Swatch,
+  drinkware: { from: "#eef0f2", to: "#c6ccd6", accent: "#3a4356", icon: "mug" } as Swatch,
+  toy: { from: "#f3eef7", to: "#d9c6ec", accent: "#5e3f7a", icon: "toy" } as Swatch,
+  kidsAccessory: { from: "#fbeef2", to: "#f0bfcf", accent: "#9c3f5c", icon: "sparkle" } as Swatch,
+  ramadan: { from: "#f0ecf5", to: "#cbb8de", accent: "#4a3163", icon: "lantern" } as Swatch,
+  graduation: { from: "#eaeef4", to: "#b7c3d9", accent: "#243a5e", icon: "cap" } as Swatch,
+  qaranqashouh: { from: "#fbf0e2", to: "#f0cf94", accent: "#8a5a12", icon: "candy" } as Swatch,
 };
 
 export const products: Product[] = [
@@ -51,56 +58,56 @@ export const products: Product[] = [
     name: { en: "Sandalwood Soy Candle", ar: "شمعة الصويا بخشب الصندل" },
     description: { en: "Hand-poured soy candle in a matte ceramic vessel.", ar: "شمعة صويا مصبوبة يدوياً في وعاء سيراميك مطفي." },
     price: 9, occasions: ["thank-you", "new-baby", "congratulations"], styles: ["minimal", "wellness", "luxury"],
-    swatch: sw.candle, stock: 45, featured: true,
+    swatch: sw.candle, stock: 45, featured: true, image: stockImages.candle,
   },
   {
     id: "p06", slug: "bakhoor-candle-trio", category: "candles",
     name: { en: "Bakhoor Candle Trio", ar: "ثلاثية شموع البخور" },
     description: { en: "Three votive candles infused with traditional Omani bakhoor.", ar: "ثلاث شموع صغيرة معطرة بالبخور العماني التقليدي." },
     price: 14, occasions: ["eid", "ramadan", "wedding"], styles: ["omani", "luxury"],
-    swatch: sw.candle, stock: 30,
+    swatch: sw.candle, stock: 30, image: stockImages.candle,
   },
   {
     id: "p07", slug: "omani-coffee-set", category: "coffee",
     name: { en: "Omani Coffee & Kahwa Set", ar: "طقم القهوة العمانية" },
     description: { en: "Traditional kahwa beans with cardamom and saffron, gift-ready.", ar: "حبوب قهوة عمانية تقليدية بالهيل والزعفران." },
     price: 15, occasions: ["eid", "ramadan", "congratulations", "corporate"], styles: ["coffee", "omani", "executive"],
-    swatch: sw.coffee, stock: 40, featured: true,
+    swatch: sw.coffee, stock: 40, featured: true, image: stockImages.coffee,
   },
   {
     id: "p08", slug: "specialty-drip-set", category: "coffee",
     name: { en: "Specialty Drip Coffee Set", ar: "طقم قهوة مقطرة مختصة" },
     description: { en: "Single-origin beans with a pour-over dripper.", ar: "حبوب قهوة مختصة مع أداة تقطير." },
     price: 18, occasions: ["birthday", "thank-you", "corporate"], styles: ["coffee", "minimal", "executive"],
-    swatch: sw.coffee, stock: 20,
+    swatch: sw.coffee, stock: 20, image: stockImages.coffeeAlt,
   },
   {
     id: "p09", slug: "belgian-chocolate-box", category: "chocolate",
     name: { en: "Belgian Chocolate Box", ar: "علبة شوكولاتة بلجيكية" },
     description: { en: "Twelve handcrafted Belgian chocolate pieces.", ar: "اثنتا عشرة قطعة شوكولاتة بلجيكية يدوية الصنع." },
     price: 11, occasions: ["birthday", "thank-you", "wedding", "congratulations"], styles: ["feminine", "luxury", "cute"],
-    swatch: sw.chocolate, stock: 50, featured: true,
+    swatch: sw.chocolate, stock: 50, featured: true, image: stockImages.chocolate,
   },
   {
     id: "p10", slug: "chocolate-covered-dates", category: "chocolate",
     name: { en: "Chocolate-Covered Dates", ar: "تمر مغطى بالشوكولاتة" },
     description: { en: "Premium Omani dates dipped in dark chocolate.", ar: "تمور عمانية فاخرة مغطاة بالشوكولاتة الداكنة." },
     price: 9, occasions: ["eid", "ramadan", "congratulations"], styles: ["omani", "luxury"],
-    swatch: sw.chocolate, stock: 45,
+    swatch: sw.chocolate, stock: 45, image: stockImages.chocolate,
   },
   {
     id: "p11", slug: "royal-dates-box", category: "dates",
     name: { en: "Royal Omani Dates Box", ar: "علبة تمور عمانية ملكية" },
     description: { en: "Hand-selected khalas dates in a wooden presentation box.", ar: "تمور خلاص منتقاة يدوياً في علبة خشبية." },
     price: 13, occasions: ["eid", "ramadan", "corporate"], styles: ["omani", "executive", "luxury"],
-    swatch: sw.dates, stock: 35, featured: true,
+    swatch: sw.dates, stock: 35, featured: true, image: stockImages.dates,
   },
   {
     id: "p12", slug: "stuffed-dates-selection", category: "dates",
     name: { en: "Stuffed Dates Selection", ar: "تشكيلة التمر المحشو" },
     description: { en: "Dates stuffed with almonds, pistachio and orange zest.", ar: "تمر محشو باللوز والفستق وقشر البرتقال." },
     price: 10, occasions: ["ramadan", "eid", "thank-you"], styles: ["omani", "cute"],
-    swatch: sw.dates, stock: 30,
+    swatch: sw.dates, stock: 30, image: stockImages.datesAlt,
   },
   {
     id: "p13", slug: "linen-notebook", category: "stationery",
@@ -213,6 +220,145 @@ export const products: Product[] = [
     description: { en: "A linen-lined keepsake box for tiny first treasures.", ar: "صندوق مبطن بالكتان لحفظ أول ذكريات الطفل." },
     price: 15, occasions: ["new-baby"], styles: ["minimal", "cute"],
     swatch: sw.baby, stock: 20,
+  },
+
+  // Drinkware
+  {
+    id: "p29", slug: "marble-ceramic-mug", category: "drinkware",
+    name: { en: "Marble Ceramic Mug", ar: "كوب سيراميك بنقشة الرخام" },
+    description: { en: "A minimalist marble-glazed mug for tea or coffee.", ar: "كوب سيراميك بتشطيب رخامي بسيط للشاي أو القهوة." },
+    price: 4.5, occasions: ["birthday", "thank-you", "congratulations", "corporate"], styles: ["minimal", "executive", "cute"],
+    swatch: sw.drinkware, stock: 30, personalizable: true,
+  },
+  {
+    id: "p30", slug: "insulated-steel-tumbler", category: "drinkware",
+    name: { en: "Insulated Steel Tumbler", ar: "ترمس معدني معزول" },
+    description: { en: "A double-walled tumbler that keeps drinks hot or cold for hours.", ar: "ترمس بجدار مزدوج يحافظ على حرارة أو برودة المشروبات." },
+    price: 5.5, occasions: ["birthday", "graduation", "corporate", "thank-you"], styles: ["minimal", "executive"],
+    swatch: sw.drinkware, stock: 25, personalizable: true, bulkAvailable: true,
+  },
+  {
+    id: "p31", slug: "arabic-coffee-cup-set", category: "drinkware",
+    name: { en: "Arabic Coffee Cup Set", ar: "طقم فناجين قهوة عربية" },
+    description: { en: "Six finjan cups with gold rim detailing.", ar: "ستة فناجين بحواف مذهبة." },
+    price: 6, occasions: ["eid", "ramadan", "corporate"], styles: ["omani", "traditional", "luxury"],
+    swatch: sw.drinkware, stock: 20,
+  },
+
+  // Kids toys
+  {
+    id: "p32", slug: "mini-puzzle-cube", category: "kids-toys",
+    name: { en: "Mini Puzzle Cube", ar: "مكعب ألغاز صغير" },
+    description: { en: "A pocket-sized puzzle toy, perfect for party favors.", ar: "لعبة ألغاز صغيرة مثالية لتوزيعات الحفلات." },
+    price: 1.5, occasions: ["birthday", "graduation", "qaranqashouh"], styles: ["cute", "fun"],
+    swatch: sw.toy, stock: 100, gender: "unisex", ageGroups: ["3-5", "6-8"], themes: ["space", "animals"],
+    tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+  {
+    id: "p33", slug: "plush-keychain-toy", category: "kids-toys",
+    name: { en: "Plush Animal Keychain", ar: "ميدالية مفاتيح دمية" },
+    description: { en: "A soft mini plush animal clipped to a keyring.", ar: "دمية صغيرة ناعمة معلقة بحلقة مفاتيح." },
+    price: 2.5, occasions: ["birthday", "qaranqashouh", "new-baby"], styles: ["cute", "fun"],
+    swatch: sw.toy, stock: 100, gender: "unisex", ageGroups: ["3-5", "6-8", "9-12"], themes: ["animals", "cute"],
+    tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+  {
+    id: "p34", slug: "bubble-bottle-favor", category: "kids-toys",
+    name: { en: "Bubble Bottle Favor", ar: "زجاجة فقاعات صابون" },
+    description: { en: "A tiny bubble bottle, a party-favor classic.", ar: "زجاجة فقاعات صغيرة، كلاسيكية توزيعات الحفلات." },
+    price: 0.8, occasions: ["birthday", "qaranqashouh", "wedding"], styles: ["cute", "fun"],
+    swatch: sw.toy, stock: 150, gender: "unisex", ageGroups: ["3-5", "6-8"], themes: ["cute"],
+    tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+
+  // Kids accessories
+  {
+    id: "p35", slug: "kids-hair-bow-set", category: "kids-accessories",
+    name: { en: "Kids Hair Bow Set", ar: "طقم ربطات شعر للأطفال" },
+    description: { en: "Three pastel hair bows sized for little ones.", ar: "ثلاث ربطات شعر بألوان هادئة مقاس الأطفال." },
+    price: 2, occasions: ["birthday", "qaranqashouh"], styles: ["cute", "feminine"],
+    swatch: sw.kidsAccessory, stock: 60, gender: "girl", ageGroups: ["3-5", "6-8", "9-12"], themes: ["princess", "cute"],
+    tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+  {
+    id: "p36", slug: "sticker-sheet-pack", category: "kids-accessories",
+    name: { en: "Sticker Sheet Pack", ar: "مجموعة ملصقات" },
+    description: { en: "A themed sticker sheet, a favorite party-favor filler.", ar: "ورقة ملصقات بطابع مرح، مثالية لتوزيعات الحفلات." },
+    price: 0.6, occasions: ["birthday", "qaranqashouh", "graduation"], styles: ["cute", "fun"],
+    swatch: sw.kidsAccessory, stock: 200, gender: "unisex", ageGroups: ["3-5", "6-8", "9-12"], themes: ["cars", "space", "animals", "moon-stars"],
+    tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+
+  // Ramadan
+  {
+    id: "p37", slug: "mini-fanoos-lantern", category: "ramadan-products",
+    name: { en: "Mini Fanoos Lantern", ar: "فانوس رمضان صغير" },
+    description: { en: "A small decorative Ramadan lantern favor.", ar: "فانوس رمضاني صغير للزينة والتوزيعات." },
+    price: 3, occasions: ["ramadan", "eid"], styles: ["traditional", "omani"],
+    swatch: sw.ramadan, stock: 60, themes: ["ramadan", "traditional"], tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+  {
+    id: "p38", slug: "ramadan-majlis-coaster-set", category: "ramadan-products",
+    name: { en: "Majlis Coaster Set", ar: "طقم مساند مجلس" },
+    description: { en: "Four woven coasters for the Ramadan majlis table.", ar: "أربع مساند منسوجة لطاولة المجلس الرمضاني." },
+    price: 4, occasions: ["ramadan"], styles: ["traditional", "luxury"],
+    swatch: sw.ramadan, stock: 25,
+  },
+  {
+    id: "p39", slug: "ramadan-dates-treat-box", category: "ramadan-products",
+    name: { en: "Ramadan Dates Treat Box", ar: "علبة تمر رمضانية" },
+    description: { en: "A small dates treat box, perfect for iftar giveaways.", ar: "علبة تمر صغيرة مثالية لتوزيعات الإفطار." },
+    price: 2.2, occasions: ["ramadan", "eid"], styles: ["traditional", "omani"],
+    swatch: sw.ramadan, stock: 80, themes: ["ramadan"], tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+
+  // Graduation
+  {
+    id: "p40", slug: "graduation-mini-box", category: "graduation-products",
+    name: { en: "Graduation Mini Box", ar: "علبة تخرج صغيرة" },
+    description: { en: "A small cap-topped box for graduation favors.", ar: "علبة صغيرة بشكل قبعة التخرج لتوزيعات التخرج." },
+    price: 2.5, occasions: ["graduation"], styles: ["elegant", "minimal"],
+    swatch: sw.graduation, stock: 60, ageGroups: ["teen", "adult"], tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+  {
+    id: "p41", slug: "graduation-tassel-charm", category: "graduation-products",
+    name: { en: "Graduation Tassel Charm", ar: "ميدالية شرابة التخرج" },
+    description: { en: "A miniature tassel charm keepsake.", ar: "ميدالية تذكارية على شكل شرابة التخرج." },
+    price: 1.2, occasions: ["graduation"], styles: ["elegant", "cute"],
+    swatch: sw.graduation, stock: 80, ageGroups: ["teen", "adult"], tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+  {
+    id: "p42", slug: "mini-diploma-scroll-candy", category: "graduation-products",
+    name: { en: "Mini Diploma Scroll Candy", ar: "حلوى لفافة الشهادة المصغرة" },
+    description: { en: "A candy tucked inside a mini diploma scroll wrap.", ar: "حلوى ملفوفة على شكل شهادة تخرج مصغرة." },
+    price: 0.9, occasions: ["graduation"], styles: ["fun", "cute"],
+    swatch: sw.graduation, stock: 150, tags: ["giveaway"], bulkAvailable: true, minQuantity: 12,
+  },
+
+  // Qaranqashouh
+  {
+    id: "p43", slug: "traditional-candy-pouch", category: "qaranqashouh-products",
+    name: { en: "Traditional Candy Pouch", ar: "كيس حلوى تقليدي" },
+    description: { en: "A small printed pouch filled with assorted candy.", ar: "كيس صغير مطبوع مليء بحلويات متنوعة." },
+    price: 1, occasions: ["qaranqashouh", "eid"], styles: ["traditional", "cute"],
+    swatch: sw.qaranqashouh, stock: 200, gender: "unisex", ageGroups: ["3-5", "6-8", "9-12"], themes: ["traditional", "cute"],
+    tags: ["giveaway", "qaranqashouh"], bulkAvailable: true, minQuantity: 12,
+  },
+  {
+    id: "p44", slug: "mini-khaleeji-sweets-bag", category: "qaranqashouh-products",
+    name: { en: "Mini Khaleeji Sweets Bag", ar: "كيس حلويات خليجية صغير" },
+    description: { en: "A drawstring bag of traditional Gulf sweets.", ar: "كيس بخيط سحب مليء بالحلويات الخليجية التقليدية." },
+    price: 1.5, occasions: ["qaranqashouh"], styles: ["traditional"],
+    swatch: sw.qaranqashouh, stock: 150, gender: "unisex", ageGroups: ["3-5", "6-8", "9-12"], themes: ["traditional"],
+    tags: ["giveaway", "qaranqashouh"], bulkAvailable: true, minQuantity: 12,
+  },
+  {
+    id: "p45", slug: "qaranqashouh-coin-purse", category: "qaranqashouh-products",
+    name: { en: "Qaranqashouh Coin Purse", ar: "كيس قرنقشوه بالعملات" },
+    description: { en: "A little embroidered coin purse, a Qaranqashouh favorite.", ar: "كيس عملات مطرز صغير، من كلاسيكيات القرنقشوه." },
+    price: 2, occasions: ["qaranqashouh"], styles: ["traditional", "cute"],
+    swatch: sw.qaranqashouh, stock: 100, gender: "unisex", ageGroups: ["3-5", "6-8", "9-12"], themes: ["traditional", "princess"],
+    tags: ["giveaway", "qaranqashouh"], bulkAvailable: true, minQuantity: 12,
   },
 ];
 

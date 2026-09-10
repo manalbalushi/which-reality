@@ -15,4 +15,10 @@ export const categories: Category[] = [
   { id: "home", slug: "home", name: { en: "Home", ar: "المنزل" }, icon: "home" },
   { id: "omani-products", slug: "omani-products", name: { en: "Omani Products", ar: "منتجات عمانية" }, icon: "omani" },
   { id: "baby-items", slug: "baby-items", name: { en: "Baby Items", ar: "مستلزمات الأطفال" }, icon: "baby" },
+  { id: "drinkware", slug: "drinkware", name: { en: "Tumblers & Mugs", ar: "أكواب وترمسات" }, icon: "mug" },
+  { id: "kids-toys", slug: "kids-toys", name: { en: "Kids Toys", ar: "ألعاب أطفال" }, icon: "toy" },
+  { id: "kids-accessories", slug: "kids-accessories", name: { en: "Kids Accessories", ar: "إكسسوارات أطفال" }, icon: "sparkle" },
+  { id: "ramadan-products", slug: "ramadan-products", name: { en: "Ramadan", ar: "رمضانيات" }, icon: "lantern" },
+  { id: "graduation-products", slug: "graduation-products", name: { en: "Graduation", ar: "التخرج" }, icon: "cap" },
+  { id: "qaranqashouh-products", slug: "qaranqashouh-products", name: { en: "Qaranqashouh", ar: "قرنقشوه" }, icon: "candy" },
 ];
