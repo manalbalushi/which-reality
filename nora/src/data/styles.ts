@@ -24,6 +24,12 @@ export const recipients: Recipient[] = [
 
 export const budgetTiers = [20, 30, 50, 75, 100];
 
+/** Quick-pick quantities for bulk/giveaway orders (e.g. kids' party favors). */
+export const quantityTiers = [1, 12, 24, 50, 100];
+
+/** Total-budget quick-picks shown once a bulk quantity (>1) is selected. */
+export const bulkBudgetTiers = [60, 100, 150, 200];
+
 export const builderOccasionIds = [
   "birthday",
   "wedding",

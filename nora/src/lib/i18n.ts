@@ -121,6 +121,13 @@ export const dictionary = {
     admin_sign_in: "Sign In",
     footer_rights: "All rights reserved.",
     footer_help: "Need help? Message us on WhatsApp.",
+    quantity_hint: "One gift, or a bulk giveaway — like kids' party favors. Set how many and your budget.",
+    single_gift: "Single Gift",
+    gifts_suffix: "gifts",
+    custom_quantity: "Custom quantity",
+    custom_amount: "Custom amount",
+    total_budget: "Total Budget (OMR)",
+    per_gift: "per gift",
   },
   ar: {
     nav_home: "الرئيسية",
@@ -242,6 +249,13 @@ export const dictionary = {
     admin_sign_in: "تسجيل الدخول",
     footer_rights: "جميع الحقوق محفوظة.",
     footer_help: "بحاجة للمساعدة؟ راسلينا عبر واتساب.",
+    quantity_hint: "هدية واحدة أو توزيعات بالجملة — مثل توزيعات الأطفال. حددي العدد والميزانية.",
+    single_gift: "هدية واحدة",
+    gifts_suffix: "هدايا",
+    custom_quantity: "كمية مخصصة",
+    custom_amount: "مبلغ مخصص",
+    total_budget: "الميزانية الإجمالية (ر.ع.)",
+    per_gift: "لكل هدية",
   },
 } as const;
 

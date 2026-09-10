@@ -12,6 +12,7 @@ interface CartContextValue {
     recipient: string;
     occasion: string;
     budget: number;
+    quantity: number;
     style: GiftStyle;
     packagingId: string;
     products: CartLineProduct[];
@@ -67,9 +68,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addGiftBuild: CartContextValue["addGiftBuild"] = (build) => {
+    const { quantity, ...rest } = build;
     setItems((prev) => [
       ...prev,
-      { id: genId(), kind: "gift-build", quantity: 1, ...build },
+      { id: genId(), kind: "gift-build", quantity, ...rest },
     ]);
   };
 

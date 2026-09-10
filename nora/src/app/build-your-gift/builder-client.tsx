@@ -8,7 +8,7 @@ import { formatOMR } from "@/lib/format";
 import { UIIcon } from "@/components/icons";
 import { Frame } from "@/components/media";
 import { PackagingCard } from "@/components/packaging-card";
-import { recipients, styles, budgetTiers, builderOccasionIds } from "@/data/styles";
+import { recipients, styles, budgetTiers, builderOccasionIds, quantityTiers, bulkBudgetTiers } from "@/data/styles";
 import { occasions } from "@/data/occasions";
 import { packagingTypes } from "@/data/packaging";
 import { categories } from "@/data/categories";
@@ -51,6 +51,7 @@ export function BuilderClient() {
   const [recipient, setRecipient] = useState("");
   const [occasion, setOccasion] = useState("");
   const [budget, setBudget] = useState<number | null>(null);
+  const [quantity, setQuantity] = useState(1);
   const [style, setStyle] = useState<GiftStyle | "">("");
   const [packagingId, setPackagingId] = useState("");
   const [selected, setSelected] = useState<Record<string, number>>({});
@@ -81,11 +82,16 @@ export function BuilderClient() {
   }, 0);
   const grandTotal = (packaging?.price ?? 0) + productsTotal;
   const itemCount = Object.values(selected).reduce((a, b) => a + b, 0);
+  const isBulk = quantity > 1;
+  // When ordering multiple identical gifts (e.g. a kids' party giveaway), the
+  // budget chips represent the TOTAL for the whole batch — the recommendation
+  // engine still reasons per single gift, so we divide it back down here.
+  const perGiftBudget = budget ? (isBulk ? Math.max(5, Math.round((budget / quantity) * 1000) / 1000) : budget) : null;
 
   const recommendation = useMemo(() => {
-    if (!recipient || !occasion || !budget || !style) return null;
-    return recommendGift({ recipient, occasion, budget, style: style as GiftStyle });
-  }, [recipient, occasion, budget, style]);
+    if (!recipient || !occasion || !perGiftBudget || !style) return null;
+    return recommendGift({ recipient, occasion, budget: perGiftBudget, style: style as GiftStyle });
+  }, [recipient, occasion, perGiftBudget, style]);
 
   const applyRecommendation = () => {
     if (!recommendation) return;
@@ -123,9 +129,10 @@ export function BuilderClient() {
       recipient,
       occasion,
       budget: budget ?? 0,
+      quantity,
       style: style as GiftStyle,
       packagingId,
-      products: Object.entries(selected).map(([productId, quantity]) => ({ productId, quantity })),
+      products: Object.entries(selected).map(([productId, qty]) => ({ productId, quantity: qty })),
       personalization,
       unitPrice: grandTotal,
     });
@@ -136,13 +143,14 @@ export function BuilderClient() {
   const summaryLines = [
     recipient && `${t("step1_title")}: ${recipients.find((r) => r.id === recipient) ? text(recipients.find((r) => r.id === recipient)!.name) : ""}`,
     occasion && `${t("occasion")}: ${text(occasions.find((o) => o.id === occasion)!.name)}`,
-    budget && `${t("step3_title")}: OMR ${budget}`,
+    isBulk && `${t("quantity")}: ${quantity} ${t("gifts_suffix")}`,
+    budget && `${isBulk ? t("total_budget") : t("step3_title")}: OMR ${budget}`,
     style && `${t("style")}: ${text(styles.find((s) => s.id === style)!.name)}`,
     packaging && `${t("packaging")}: ${text(packaging.name)}`,
   ].filter(Boolean);
 
   const shareText = encodeURIComponent(
-    `${t("nav_build")} — ${summaryLines.join(" · ")} · Total ${formatOMR(grandTotal, locale)}`
+    `${t("nav_build")} — ${summaryLines.join(" · ")} · Total ${formatOMR(grandTotal * quantity, locale)}`
   );
 
   return (
@@ -204,17 +212,55 @@ export function BuilderClient() {
 
           {step === 3 && (
             <div>
-              <h2 className="font-serif text-2xl mb-5">{t("step3_title")}</h2>
+              <h2 className="font-serif text-2xl mb-2">{t("step3_title")}</h2>
+              <p className="text-sm text-charcoal-soft mb-6 max-w-md">{t("quantity_hint")}</p>
+
+              <p className="text-xs uppercase tracking-wider text-charcoal-soft mb-3">{t("quantity")}</p>
               <div className="flex flex-wrap gap-3">
-                {budgetTiers.map((b) => (
+                {quantityTiers.map((q) => (
+                  <ChipButton
+                    key={q}
+                    label={q === 1 ? t("single_gift") : `${q} ${t("gifts_suffix")}`}
+                    selected={quantity === q}
+                    onClick={() => setQuantity(q)}
+                  />
+                ))}
+              </div>
+              <input
+                type="number"
+                min={1}
+                value={quantity}
+                onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))}
+                placeholder={t("custom_quantity")}
+                className="mt-3 w-40 border border-line rounded-xl px-4 py-2.5 bg-cream outline-none focus:border-charcoal text-sm"
+              />
+
+              <p className="text-xs uppercase tracking-wider text-charcoal-soft mb-3 mt-7">
+                {isBulk ? t("total_budget") : t("step3_title")}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {(isBulk ? bulkBudgetTiers : budgetTiers).map((b) => (
                   <ChipButton
                     key={b}
-                    label={b === 100 ? "100 OMR+" : `${b} OMR`}
+                    label={b === 100 && !isBulk ? "100 OMR+" : `${b} OMR`}
                     selected={budget === b}
                     onClick={() => setBudget(b)}
                   />
                 ))}
               </div>
+              <input
+                type="number"
+                min={1}
+                value={budget ?? ""}
+                onChange={(e) => setBudget(Number(e.target.value) || null)}
+                placeholder={t("custom_amount")}
+                className="mt-3 w-40 border border-line rounded-xl px-4 py-2.5 bg-cream outline-none focus:border-charcoal text-sm"
+              />
+              {isBulk && perGiftBudget && (
+                <p className="mt-3 text-sm text-charcoal-soft">
+                  ≈ {formatOMR(perGiftBudget, locale)} {t("per_gift")}
+                </p>
+              )}
             </div>
           )}
 
@@ -240,6 +286,7 @@ export function BuilderClient() {
               {recommendation && (
                 <RecommendationCallout
                   recommendation={recommendation}
+                  quantity={quantity}
                   onApply={applyRecommendation}
                 />
               )}
@@ -262,6 +309,7 @@ export function BuilderClient() {
               {recommendation && (
                 <RecommendationCallout
                   recommendation={recommendation}
+                  quantity={quantity}
                   onApply={applyRecommendation}
                 />
               )}
@@ -416,6 +464,7 @@ export function BuilderClient() {
           recipient={recipient}
           occasion={occasion}
           budget={budget}
+          quantity={quantity}
           style={style}
           packagingId={packagingId}
           selected={selected}
@@ -429,12 +478,19 @@ export function BuilderClient() {
 
 function RecommendationCallout({
   recommendation,
+  quantity,
   onApply,
 }: {
   recommendation: ReturnType<typeof recommendGift>;
+  quantity: number;
   onApply: () => void;
 }) {
   const { t, text, locale } = useLocale();
+  const gallery = [
+    { swatch: recommendation.packaging.swatch, name: recommendation.packaging.name },
+    ...recommendation.products.map((p) => ({ swatch: p.swatch, name: p.name })),
+  ];
+
   return (
     <div className="mb-6 rounded-2xl border border-taupe/50 bg-beige/40 p-5">
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -449,18 +505,26 @@ function RecommendationCallout({
           {t("use_recommendation")}
         </button>
       </div>
-      <div className="mt-3 flex flex-wrap gap-2 text-xs">
-        <span className="px-3 py-1 rounded-full bg-cream border border-line">
-          {text(recommendation.packaging.name)}
-        </span>
-        {recommendation.products.map((p) => (
-          <span key={p.id} className="px-3 py-1 rounded-full bg-cream border border-line">
-            {text(p.name)}
-          </span>
+
+      <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+        {gallery.map((g, i) => (
+          <div key={i} className="shrink-0 w-16 text-center">
+            <Frame swatch={g.swatch} className="w-16 h-16" iconClassName="w-6 h-6" />
+            <p className="mt-1.5 text-[10.5px] leading-tight text-charcoal-soft">{text(g.name)}</p>
+          </div>
         ))}
-        <span className="px-3 py-1 rounded-full bg-charcoal text-cream">
-          {formatOMR(recommendation.total, locale)}
-        </span>
+      </div>
+
+      <div className="mt-3">
+        {quantity > 1 ? (
+          <span className="inline-block px-4 py-1.5 rounded-full bg-charcoal text-cream text-xs">
+            {formatOMR(recommendation.total, locale)} {t("per_gift")} × {quantity} = {formatOMR(recommendation.total * quantity, locale)}
+          </span>
+        ) : (
+          <span className="inline-block px-4 py-1.5 rounded-full bg-charcoal text-cream text-xs">
+            {formatOMR(recommendation.total, locale)}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -470,6 +534,7 @@ function LivePreview({
   recipient,
   occasion,
   budget,
+  quantity,
   style,
   packagingId,
   selected,
@@ -479,6 +544,7 @@ function LivePreview({
   recipient: string;
   occasion: string;
   budget: number | null;
+  quantity: number;
   style: GiftStyle | "";
   packagingId: string;
   selected: Record<string, number>;
@@ -486,6 +552,7 @@ function LivePreview({
   grandTotal: number;
 }) {
   const { t, text, locale } = useLocale();
+  const isBulk = quantity > 1;
   const packaging = packagingTypes.find((p) => p.id === packagingId);
   const recipientLabel = recipients.find((r) => r.id === recipient);
   const occasionLabel = occasions.find((o) => o.id === occasion);
@@ -517,9 +584,15 @@ function LivePreview({
             <dd>{text(occasionLabel.name)}</dd>
           </div>
         )}
+        {isBulk && (
+          <div className="flex justify-between">
+            <dt className="text-charcoal-soft">{t("quantity")}</dt>
+            <dd>{quantity} {t("gifts_suffix")}</dd>
+          </div>
+        )}
         {budget && (
           <div className="flex justify-between">
-            <dt className="text-charcoal-soft">{t("step3_title")}</dt>
+            <dt className="text-charcoal-soft">{isBulk ? t("total_budget") : t("step3_title")}</dt>
             <dd>OMR {budget}</dd>
           </div>
         )}
@@ -565,9 +638,14 @@ function LivePreview({
         </div>
       )}
 
+      {isBulk && grandTotal > 0 && (
+        <p className="mt-3 text-xs text-charcoal-soft">
+          {formatOMR(grandTotal, locale)} {t("per_gift")} × {quantity}
+        </p>
+      )}
       <div className="mt-5 pt-4 border-t border-line flex justify-between items-center">
         <span className="text-sm uppercase tracking-wider">{t("total")}</span>
-        <span className="font-serif text-xl">{formatOMR(grandTotal, locale)}</span>
+        <span className="font-serif text-xl">{formatOMR(grandTotal * quantity, locale)}</span>
       </div>
     </aside>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Product } from "@/lib/types";
 import { Frame } from "@/components/media";
@@ -33,8 +33,13 @@ export function ProductDetailClient({ product }: { product: Product }) {
   const shareText = encodeURIComponent(
     `${text(product.name)} — ${formatOMR(product.price, locale)} · NORA Gifts Oman`
   );
-  const shareUrl =
-    typeof window !== "undefined" ? encodeURIComponent(window.location.href) : "";
+  const [shareUrl, setShareUrl] = useState("");
+  useEffect(() => {
+    // Deferred to after mount: window.location isn't available during SSR,
+    // and reading it directly at render time causes a hydration mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setShareUrl(encodeURIComponent(window.location.href));
+  }, []);
 
   return (
     <div className="container-nora py-12 sm:py-16">
@@ -63,18 +68,27 @@ export function ProductDetailClient({ product }: { product: Product }) {
               <p className="text-xs uppercase tracking-wider text-charcoal-soft mb-3">
                 {t("packaging")}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 {availablePackaging.map((p) => (
                   <button
                     key={p.id}
                     onClick={() => setPackagingId(p.id)}
-                    className={`px-4 py-2 rounded-full text-sm border transition-colors ${
-                      packagingId === p.id
-                        ? "bg-charcoal text-cream border-charcoal"
-                        : "border-line hover:bg-beige"
-                    }`}
+                    className="w-20 text-center"
                   >
-                    {text(p.name)}
+                    <Frame
+                      swatch={p.swatch}
+                      className={`w-20 h-20 border-2 ${
+                        packagingId === p.id ? "border-charcoal" : "border-transparent"
+                      }`}
+                      iconClassName="w-6 h-6"
+                    />
+                    <p
+                      className={`mt-1.5 text-[11px] leading-tight ${
+                        packagingId === p.id ? "text-charcoal" : "text-charcoal-soft"
+                      }`}
+                    >
+                      {text(p.name)}
+                    </p>
                   </button>
                 ))}
               </div>
