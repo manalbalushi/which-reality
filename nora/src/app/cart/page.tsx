@@ -3,7 +3,7 @@ import { CartClient } from "./cart-client";
 
 export const metadata: Metadata = {
   title: "Your Cart",
-  description: "Review your NORA gift selections before checkout.",
+  description: "Review your Noola gift selections before checkout.",
 };
 
 export default function CartPage() {

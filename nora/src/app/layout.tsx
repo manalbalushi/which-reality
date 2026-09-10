@@ -31,13 +31,13 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nora-gifts.example.om"),
+  metadataBase: new URL("https://noola-gifts.example.om"),
   title: {
-    default: "NORA — Luxury Gifts in Oman | Gifts, Thoughtfully Curated.",
-    template: "%s | NORA Gifts Oman",
+    default: "Noola — Luxury Gifts in Oman | Gifts, Thoughtfully Curated.",
+    template: "%s | Noola Gifts Oman",
   },
   description:
-    "NORA is Oman's premium gifting studio. Build a personalized gift box, basket or tote for birthdays, weddings, Eid, Ramadan and corporate gifting — with delivery across Oman.",
+    "Noola is Oman's premium gifting studio. Build a personalized gift box, basket or tote for birthdays, weddings, Eid, Ramadan and corporate gifting — with delivery across Oman.",
   keywords: [
     "Gifts in Oman",
     "Gift Boxes Oman",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     "Gift Delivery Oman",
   ],
   openGraph: {
-    title: "NORA — Gifts, Thoughtfully Curated.",
+    title: "Noola — Gifts, Thoughtfully Curated.",
     description:
       "Build a personalized gift for every occasion, delivered across Oman.",
     locale: "en_OM",

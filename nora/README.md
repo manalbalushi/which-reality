@@ -1,6 +1,6 @@
-# NORA — Gifts, Thoughtfully Curated.
+# Noola — Gifts, Thoughtfully Curated.
 
-A premium e-commerce prototype for **NORA**, an Omani gifting brand. Built with Next.js
+A premium e-commerce prototype for **Noola**, an Omani gifting brand. Built with Next.js
 (App Router), TypeScript and Tailwind CSS. Bilingual (English / Arabic with full RTL),
 priced in OMR, and designed for a luxury GCC gifting experience.
 
@@ -14,7 +14,7 @@ priced in OMR, and designed for a luxury GCC gifting experience.
   WhatsApp sharing and "Order via WhatsApp".
 - **Occasions**, **Corporate gifting** (inquiry form), **Cart** and **Checkout** (delivery
   regions/methods, gift flag, payment method selection).
-- **Admin dashboard** at `/admin` (demo password: `nora-admin`) — manage products,
+- **Admin dashboard** at `/admin` (demo password: `noola-admin`) — manage products,
   categories, occasions and packaging; view/update order status; see the exact recipient,
   occasion, budget, style, packaging, products and personalization a customer selected;
   view corporate requests.
@@ -29,7 +29,7 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). Admin dashboard: `/admin` (password
-`nora-admin`, override with the `NORA_ADMIN_PASSWORD` env var).
+`noola-admin`, override with the `NOOLA_ADMIN_PASSWORD` env var).
 
 ## Project structure
 
