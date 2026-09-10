@@ -15,7 +15,7 @@ export async function generateMetadata(
   if (!occasion) return {};
   return {
     title: `${occasion.name.en} Gifts Oman`,
-    description: `${occasion.blurb.en} — curated ${occasion.name.en.toLowerCase()} gifts, delivered across Oman by Noola.`,
+    description: `${occasion.blurb.en} — curated ${occasion.name.en.toLowerCase()} gifts, delivered across Oman by NORA.`,
   };
 }
 

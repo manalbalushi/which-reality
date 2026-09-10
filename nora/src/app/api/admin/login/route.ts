@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const ADMIN_PASSWORD = process.env.NOOLA_ADMIN_PASSWORD || "noola-admin";
+const ADMIN_PASSWORD = process.env.NORA_ADMIN_PASSWORD || "nora-admin";
 
 export async function POST(req: NextRequest) {
   const { password } = (await req.json()) as { password: string };

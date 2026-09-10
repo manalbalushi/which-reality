@@ -26,7 +26,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="container-nora py-10 grid lg:grid-cols-[220px_1fr] gap-10">
       <aside>
-        <p className="font-serif text-2xl tracking-luxe uppercase mb-1">Noola</p>
+        <p className="font-serif text-2xl tracking-luxe uppercase mb-1">NORA</p>
         <p className="text-xs text-charcoal-soft mb-6">Admin Dashboard</p>
         <nav className="flex lg:flex-col gap-1 flex-wrap">
           {links.map((l) => {

@@ -32,7 +32,7 @@ export default function AdminLoginPage() {
   return (
     <div className="container-nora py-24 max-w-sm mx-auto">
       <h1 className="font-serif text-3xl text-center">{t("admin_login")}</h1>
-      <p className="mt-2 text-center text-xs text-charcoal-soft">Demo password: noola-admin</p>
+      <p className="mt-2 text-center text-xs text-charcoal-soft">Demo password: nora-admin</p>
       <form onSubmit={submit} className="mt-8 space-y-4">
         <label className="text-sm block">
           <span className="block text-xs uppercase tracking-wider text-charcoal-soft mb-2">

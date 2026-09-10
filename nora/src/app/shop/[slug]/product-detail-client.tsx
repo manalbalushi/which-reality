@@ -31,7 +31,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
   );
 
   const shareText = encodeURIComponent(
-    `${text(product.name)} — ${formatOMR(product.price, locale)} · Noola Gifts Oman`
+    `${text(product.name)} — ${formatOMR(product.price, locale)} · NORA Gifts Oman`
   );
   const shareUrl =
     typeof window !== "undefined" ? encodeURIComponent(window.location.href) : "";

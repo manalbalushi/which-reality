@@ -46,7 +46,7 @@ export function Header() {
         </button>
 
         <Link href="/" className="shrink-0">
-          <span className="font-serif text-2xl sm:text-3xl tracking-luxe uppercase">Noola</span>
+          <span className="font-serif text-2xl sm:text-3xl tracking-luxe uppercase">NORA</span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8 text-[13px] uppercase tracking-wider">

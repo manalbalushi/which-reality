@@ -23,7 +23,7 @@ export function Footer() {
     <footer className="border-t border-line bg-ivory mt-20">
       <div className="container-nora py-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <span className="font-serif text-2xl tracking-luxe uppercase">Noola</span>
+          <span className="font-serif text-2xl tracking-luxe uppercase">NORA</span>
           <p className="mt-3 text-sm text-charcoal-soft max-w-xs">{t("tagline")}</p>
           <a
             href="https://wa.me/96890000000"
@@ -51,7 +51,7 @@ export function Footer() {
           <h4 className="text-xs uppercase tracking-wider text-charcoal-soft mb-4">Oman</h4>
           <ul className="space-y-2 text-sm text-charcoal-soft">
             <li>Muscat, Sultanate of Oman</li>
-            <li>hello@noola-gifts.om</li>
+            <li>hello@nora-gifts.om</li>
             <li>+968 9000 0000</li>
             <li><Link href="/admin" className="hover:text-taupe">Admin</Link></li>
           </ul>
@@ -67,7 +67,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-line py-5 text-center text-xs text-charcoal-soft">
-        © {new Date().getFullYear()} Noola. {t("footer_rights")}
+        © {new Date().getFullYear()} NORA. {t("footer_rights")}
       </div>
     </footer>
   );
