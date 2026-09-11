@@ -19,4 +19,13 @@ export const stockImages = {
   packagingGiftBox: unsplash("IsOQu4nML-Y"),
   packagingBasket: unsplash("hO31_kTUA3g"),
   packagingGiftBag: unsplash("1Pgq9ZpIatI"),
+  perfume: unsplash("LkT5-JCePUY"),
+  beauty: unsplash("UYJTgxZtUmk"),
+  stationery: unsplash("9byKncZaV0c"),
+  accessories: unsplash("FBBwDcrDt7U"),
+  home: unsplash("l0ah3UBLppo"),
+  drinkware: unsplash("uIDmFABRKyw"),
+  kidsToy: unsplash("s7nHwCnq3c8"),
+  graduation: unsplash("FTiBaowRI6I"),
+  qaranqashouh: unsplash("yxieo9QaLEk"),
 };
