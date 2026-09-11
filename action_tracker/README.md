@@ -65,15 +65,35 @@ A few things worth knowing before you share the link:
 - **Back up `instance/`** (`action_tracker.db` + `uploads/`) periodically —
   it's the only copy of the data while running this way.
 
-## Try the Excel migration
+## Load your existing action tracker
 
-A sample legacy tracker is provided at
-`sample_data/sample_action_tracker.xlsx` (regenerate with
-`python3 scripts/make_sample_excel.py`). Sign in as an Admin, open
-**Import**, upload that file, review the auto-suggested column mapping, and
-confirm — new actions appear in the register with their original reference
-preserved as a Legacy ID. The uploaded file itself is kept untouched under
-`instance/uploads/imports/`.
+1. Run the app (`run.py` for desktop-only use, above) and sign in as **Manal
+   Albalushi (Admin)** — only Admins can import.
+2. Open **Import** from the top menu.
+3. Choose your real Excel tracker file (`.xlsx`) and upload it. Nothing
+   about your original file is touched — it's copied, read-only, into
+   `instance/uploads/imports/`, and the actual spreadsheet on your desktop
+   is never opened for writing.
+4. You'll land on a mapping screen with your file's own column headers
+   already guessed against the tracker's fields (Title, Owner, Status, Due
+   Date, etc.) — a preview of the first few rows is shown underneath so you
+   can check it guessed right. Fix any dropdown that's wrong or unmapped.
+5. Click **Confirm and import**. Every row becomes a new action with a
+   generated Action ID (`ACTION-0001`, `ACTION-0002`, …); your original
+   reference number, if your sheet had one, is kept as its Legacy ID so you
+   can always trace a row back to where it came from.
+6. You land on a summary showing how many rows imported and which ones got
+   a default value applied (e.g. a Status your sheet used that isn't one of
+   the tracker's fixed options) — worth a quick scan, then **Go to Action
+   Register** to see everything.
+
+That's a one-time load. From then on, the database at
+`instance/action_tracker.db` is where the data lives — running `run.py`
+again later reopens the same actions, it doesn't re-import anything.
+
+A ready-made sample file is also included at
+`sample_data/sample_action_tracker.xlsx` if you want to try the flow before
+using your real one (regenerate it with `python3 scripts/make_sample_excel.py`).
 
 ## Notes
 
