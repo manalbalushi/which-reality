@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  /* Enterprise navy / blue / white cybersecurity theme */
+  --navy-950: #060f1f;
+  --navy-900: #0a1930;
+  --navy-800: #0f2444;
+  --navy-700: #16315c;
+  --navy-600: #1e4176;
+
+  --blue-600: #1d5fd6;
+  --blue-500: #2f6fef;
+  --blue-400: #5b8cf5;
+  --blue-100: #e5edfc;
+  --blue-50: #f2f6fd;
+
+  --slate-900: #101828;
+  --slate-700: #344054;
+  --slate-500: #667085;
+  --slate-300: #d0d5dd;
+  --slate-200: #e4e7ec;
+  --slate-100: #f2f4f7;
+  --slate-50: #f9fafb;
+
+  --rating-critical: #c62828;
+  --rating-high: #ef6c00;
+  --rating-medium: #f9a825;
+  --rating-low: #2e7d32;
+
+  --background: #ffffff;
+  --foreground: var(--slate-900);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-navy-700: var(--navy-700);
+  --color-navy-600: var(--navy-600);
+
+  --color-brand-600: var(--blue-600);
+  --color-brand-500: var(--blue-500);
+  --color-brand-400: var(--blue-400);
+  --color-brand-100: var(--blue-100);
+  --color-brand-50: var(--blue-50);
+
+  --color-slate-900: var(--slate-900);
+  --color-slate-700: var(--slate-700);
+  --color-slate-500: var(--slate-500);
+  --color-slate-300: var(--slate-300);
+  --color-slate-200: var(--slate-200);
+  --color-slate-100: var(--slate-100);
+  --color-slate-50: var(--slate-50);
+
+  --color-rating-critical: var(--rating-critical);
+  --color-rating-high: var(--rating-high);
+  --color-rating-medium: var(--rating-medium);
+  --color-rating-low: var(--rating-low);
+}
+
+body {
+  background: var(--slate-50);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--blue-100);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--slate-300);
+  border-radius: 9999px;
+}

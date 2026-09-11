@@ -1,0 +1,8 @@
+# Minimal Supabase CLI config for this project.
+# Link to your project with `supabase link --project-ref <your-project-ref>`,
+# then apply the schema with `supabase db push` (or run the files in
+# supabase/migrations/ manually via the SQL editor, in numeric order).
+project_id = "ot-risk-management"
+
+[db]
+major_version = 15
