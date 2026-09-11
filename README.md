@@ -66,6 +66,11 @@ sample data. Highlights:
   write nothing; a Risk Assessor can create content; nobody can insert/update/delete
   `audit_logs` directly (writes only happen via a `SECURITY DEFINER` trigger).
 - **`0006_storage.sql`** — the `evidence` Storage bucket and its access policies.
+- **`0007_notification_triggers.sql`** — real notification generation (§35): assessment/action
+  assignment, each approval-workflow transition (notifies the next reviewer role, or the owner on
+  a terminal decision), and extension requests/decisions. Verified end-to-end against the seed
+  data (84 notifications generated from 10 assessments' worth of activity, correctly scoped per
+  user by RLS).
 
 Soft deletion (`is_deleted`) is used on assessments/risks/actions/assets/evidence so a parent
 record can be archived without destroying the audit trail or history that references it — audit
@@ -132,7 +137,7 @@ directly, so it can't be bypassed or forgotten.
 2. **Run the migrations**, in order, against your project's SQL editor (or `psql` /
    `supabase db push`):
    `supabase/migrations/0001_schema.sql` → `0002_core.sql` → `0003_functions.sql` →
-   `0004_views.sql` → `0005_rls.sql` → `0006_storage.sql`.
+   `0004_views.sql` → `0005_rls.sql` → `0006_storage.sql` → `0007_notification_triggers.sql`.
 3. **Copy `.env.example` to `.env.local`** and fill in your project's URL, anon key, and service
    role key (Project Settings → API).
 4. **Create the demo users**: `npm install` then `npm run seed:users` (reads `.env.local`,
