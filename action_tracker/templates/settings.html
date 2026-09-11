@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h4 class="section-title">Settings &amp; Administration</h4>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <div class="fw-semibold mb-2">Reminder configuration</div>
+      <form method="post">
+        <div class="mb-2">
+          <label class="form-label small">Notify owners this many days before the target date</label>
+          <input type="number" min="1" class="form-control" name="reminder_days_before_due" value="{{ reminder_days }}">
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <div class="fw-semibold mb-2">Users &amp; roles</div>
+      <table class="table table-sm mb-0">
+        <thead><tr><th>Name</th><th>Role</th><th>Dept</th></tr></thead>
+        <tbody>
+          {% for u in users %}
+          <tr><td>{{ u.name }}</td><td><span class="badge bg-secondary">{{ u.role }}</span></td><td class="small">{{ u.department }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <div class="fw-semibold mb-2">Recent audit log</div>
+      <div style="max-height:320px; overflow-y:auto;">
+        {% for a in audit %}
+        <div class="small border-bottom py-1">
+          <span class="text-muted">{{ a.timestamp|dateonly }}</span> — <strong>{{ a.actor }}</strong>
+          {{ a.action_type }} {{ a.action_id or '' }}<br>
+          <span class="text-muted">{{ a.details }}</span>
+        </div>
+        {% else %}
+        <div class="text-muted small">No audit entries yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% import "_badges.html" as b %}
+{% block title %}{{ action.action_id }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+  <div>
+    <h4 class="section-title mb-0">{{ action.action_id }} &middot; {{ action.title }}</h4>
+    <div class="text-muted small">{{ action.department }} &middot; Owner: {{ action.owner }} &middot; Source: {{ action.source or '-' }}</div>
+  </div>
+  <div>
+    {% if can_edit %}
+    <a href="{{ url_for('actions.update_action', action_id=action.action_id) }}" class="btn btn-primary btn-sm">Update this action</a>
+    <a href="{{ url_for('evidence.upload_evidence', action_id=action.action_id) }}" class="btn btn-outline-primary btn-sm">Upload evidence</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-md-3"><div class="card p-3"><div class="kpi-label">Status</div>{{ b.status_badge(action.status) }}</div></div>
+  <div class="col-md-3"><div class="card p-3"><div class="kpi-label">Priority</div>{{ b.priority_badge(action.priority) }}</div></div>
+  <div class="col-md-3"><div class="card p-3"><div class="kpi-label">Evidence Status</div>{{ b.evidence_badge(action.evidence_status) }}</div></div>
+  <div class="col-md-3"><div class="card p-3"><div class="kpi-label">Completion</div><div class="fw-semibold">{{ action.completion_pct }}%</div></div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <div class="fw-semibold mb-2">Details</div>
+      <table class="table table-sm mb-0">
+        <tr><td class="text-muted">Description</td><td>{{ action.description or '-' }}</td></tr>
+        <tr><td class="text-muted">Date Raised</td><td>{{ action.date_raised|dateonly }}</td></tr>
+        <tr><td class="text-muted">Original Target Date</td><td>{{ action.original_target_date|dateonly }}</td></tr>
+        <tr><td class="text-muted">Current Target Date</td><td>{{ action.current_target_date|dateonly }}</td></tr>
+        <tr><td class="text-muted">Days Open</td><td>{{ days_open if days_open is not none else '-' }}</td></tr>
+        <tr><td class="text-muted">Days Overdue</td><td>{{ days_overdue }}</td></tr>
+        <tr><td class="text-muted">Evidence Required</td><td>{{ action.evidence_required }}</td></tr>
+        <tr><td class="text-muted">Last Updated</td><td>{{ action.last_updated|dateonly }}</td></tr>
+        <tr><td class="text-muted">Closure Date</td><td>{{ action.closure_date|dateonly if action.closure_date else '-' }}</td></tr>
+        {% if action.legacy_id %}<tr><td class="text-muted">Legacy Reference</td><td>{{ action.legacy_id }}</td></tr>{% endif %}
+      </table>
+      <div class="mt-2"><span class="text-muted small">Latest comment:</span><br>{{ action.latest_comment or '-' }}</div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <div class="fw-semibold mb-2">Update history</div>
+      {% if not history %}
+      <div class="text-muted small">No updates recorded yet.</div>
+      {% endif %}
+      {% for h in history %}
+      <div class="history-item">
+        <div class="small text-muted">{{ h.update_date|dateonly }} &middot; {{ h.updated_by }}</div>
+        {% if h.previous_status != h.new_status %}
+        <div class="small">Status: <strong>{{ h.previous_status or '—' }}</strong> → <strong>{{ h.new_status }}</strong></div>
+        {% endif %}
+        {% if h.previous_target_date != h.new_target_date %}
+        <div class="small">Target date: {{ h.previous_target_date|dateonly if h.previous_target_date else '—' }} → {{ h.new_target_date|dateonly if h.new_target_date else '—' }}</div>
+        {% endif %}
+        <div>{{ h.comment }}</div>
+        {% if h.approval_status %}<div class="small text-muted">Approval: {{ h.approval_status }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <div class="fw-semibold mb-2">Evidence ({{ evidence|length }})</div>
+      {% if not evidence %}
+      <div class="text-muted small">No evidence uploaded yet.</div>
+      {% endif %}
+      {% for e in evidence %}
+      <div class="border rounded p-2 mb-2">
+        <div class="d-flex justify-content-between">
+          <strong class="small">{{ e.evidence_id }} · v{{ e.version }}</strong>
+          {{ b.evidence_badge(e.evidence_status) }}
+        </div>
+        <div class="small">{{ e.evidence_name }}</div>
+        <div class="small text-muted">{{ e.evidence_type or '-' }} &middot; {{ e.uploaded_by }} &middot; {{ e.upload_date|dateonly }}</div>
+        {% if e.file_path %}
+        <a class="small" href="{{ url_for('evidence.evidence_file', action_id=e.action_id, filename=e.file_path) }}">Download file</a>
+        {% endif %}
+        {% if e.evidence_status == 'Rejected' and e.rejection_reason %}
+        <div class="small text-danger mt-1">Rejected: {{ e.rejection_reason }}</div>
+        {% endif %}
+        {% if e.reviewer %}
+        <div class="small text-muted">Reviewed by {{ e.reviewer }} on {{ e.review_date|dateonly }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

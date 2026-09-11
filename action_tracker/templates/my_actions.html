@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "_badges.html" as b %}
+{% block title %}My Actions{% endblock %}
+{% block content %}
+<h4 class="section-title">My Actions</h4>
+{% if not actions %}
+<div class="alert alert-secondary">No actions are currently assigned to you.</div>
+{% else %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Action ID</th><th>Title</th><th>Priority</th><th>Status</th>
+          <th>Target Date</th><th>Days Overdue</th><th>Completion</th><th>Evidence</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in actions %}
+        <tr class="{{ 'table-danger' if a.days_overdue > 0 else '' }}">
+          <td><strong>{{ a.action_id }}</strong></td>
+          <td>{{ a.title }}</td>
+          <td>{{ b.priority_badge(a.priority) }}</td>
+          <td>{{ b.status_badge(a.status) }}</td>
+          <td>{{ a.current_target_date|dateonly }}</td>
+          <td>{{ a.days_overdue if a.days_overdue else '-' }}</td>
+          <td>{{ a.completion_pct }}%</td>
+          <td>{{ b.evidence_badge(a.evidence_status) }}</td>
+          <td class="text-end">
+            <a href="{{ url_for('actions.detail', action_id=a.action_id) }}" class="btn btn-sm btn-outline-secondary">View</a>
+            <a href="{{ url_for('actions.update_action', action_id=a.action_id) }}" class="btn btn-sm btn-primary">Update</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

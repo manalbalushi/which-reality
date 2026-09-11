@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Import from Excel{% endblock %}
+{% block content %}
+<h4 class="section-title">Import Existing Excel Tracker</h4>
+<p class="text-muted">Upload your current Excel action tracker. The original file is kept untouched under
+  the server's import archive — nothing is overwritten or deleted. You'll map its columns to the new
+  fields on the next screen before anything is imported.</p>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card p-3">
+      <form method="post" action="{{ url_for('importer.import_upload') }}" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Excel file (.xlsx)</label>
+          <input type="file" class="form-control" name="excel_file" accept=".xlsx,.xlsm" required>
+        </div>
+        <div class="form-text mb-3">The first row must be column headers. Data starts from row 2.</div>
+        <button type="submit" class="btn btn-primary">Upload &amp; map columns</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card p-3">
+      <div class="fw-semibold mb-2">What happens next</div>
+      <ol class="small text-muted mb-0">
+        <li>We read the column headers from your file and suggest a mapping automatically.</li>
+        <li>You review/adjust the mapping and see a preview of the first rows.</li>
+        <li>On confirmation, each row becomes a new Action with a system-generated Action ID.
+          Your original reference (if any) is preserved as a Legacy Reference.</li>
+        <li>Rows missing a title are skipped and listed in the summary - the original file is untouched
+          so you can fix and re-import if needed.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+{% endblock %}

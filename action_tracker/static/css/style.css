@@ -1,0 +1,102 @@
+:root {
+  --brand-navy: #0f2942;
+  --brand-navy-dark: #0a1c2e;
+  --brand-accent: #2f81f7;
+  --brand-bg: #f5f7fa;
+}
+
+body {
+  background-color: var(--brand-bg);
+  color: #1b2733;
+}
+
+.app-navbar {
+  background: linear-gradient(90deg, var(--brand-navy) 0%, var(--brand-navy-dark) 100%);
+}
+
+.notif-badge {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  font-size: 0.6rem;
+}
+
+.card {
+  border: 1px solid #e3e8ee;
+  border-radius: 0.6rem;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.kpi-card {
+  text-align: center;
+  padding: 1rem 0.5rem;
+}
+
+.kpi-value {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--brand-navy);
+}
+
+.kpi-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7684;
+}
+
+.status-badge {
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.32em 0.6em;
+}
+
+.status-Not-Started { background-color: #e5e7eb; color: #374151; }
+.status-In-Progress { background-color: #dbeafe; color: #1d4ed8; }
+.status-Pending-Validation { background-color: #fef3c7; color: #92400e; }
+.status-Completed { background-color: #d1fae5; color: #065f46; }
+.status-Overdue { background-color: #fee2e2; color: #991b1b; }
+.status-Closed { background-color: #e0e7ff; color: #3730a3; }
+
+.evidence-Not-Submitted { background-color: #e5e7eb; color: #374151; }
+.evidence-Submitted { background-color: #dbeafe; color: #1d4ed8; }
+.evidence-Under-Review { background-color: #fef3c7; color: #92400e; }
+.evidence-Accepted { background-color: #d1fae5; color: #065f46; }
+.evidence-Rejected { background-color: #fee2e2; color: #991b1b; }
+
+.priority-Low { background-color: #e5e7eb; color: #374151; }
+.priority-Medium { background-color: #dbeafe; color: #1d4ed8; }
+.priority-High { background-color: #fed7aa; color: #9a3412; }
+.priority-Critical { background-color: #fee2e2; color: #991b1b; }
+
+.table-hover tbody tr:hover { background-color: #f0f4f9; }
+
+.section-title {
+  font-weight: 600;
+  color: var(--brand-navy);
+  margin-bottom: 0.75rem;
+}
+
+.history-item {
+  border-left: 3px solid var(--brand-accent);
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.home-tile {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.home-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 24, 40, 0.08);
+}
+.home-tile i {
+  font-size: 1.8rem;
+  color: var(--brand-accent);
+  margin-bottom: 0.5rem;
+}

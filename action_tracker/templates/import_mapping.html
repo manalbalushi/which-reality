@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Map Columns{% endblock %}
+{% block content %}
+<h4 class="section-title">Map Excel Columns to Tracker Fields</h4>
+<p class="text-muted">We've auto-suggested a mapping based on your column headers. Adjust anything that's
+  wrong, then confirm to import. Fields marked <span class="text-danger">*</span> are recommended.</p>
+
+<form method="post" action="{{ url_for('importer.import_confirm') }}">
+  <input type="hidden" name="stored_name" value="{{ stored_name }}">
+  <div class="card p-3 mb-3">
+    <div class="row fw-semibold small text-muted mb-2">
+      <div class="col-md-5">New system field</div>
+      <div class="col-md-7">Existing Excel column</div>
+    </div>
+    {% for field, label, required in target_fields %}
+    <div class="row align-items-center mb-2">
+      <div class="col-md-5">{{ label }}{% if required %} <span class="text-danger">*</span>{% endif %}</div>
+      <div class="col-md-7">
+        <select class="form-select form-select-sm" name="map_{{ field }}">
+          <option value="">-- Not mapped --</option>
+          {% for h in headers %}
+          <option value="{{ loop.index0 }}" {{ 'selected' if mapping.get(field) == loop.index0 else '' }}>{{ h }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if preview_rows %}
+  <div class="card p-3 mb-3">
+    <div class="fw-semibold mb-2">Preview (first {{ preview_rows|length }} data rows)</div>
+    <div class="table-responsive">
+      <table class="table table-sm">
+        <thead><tr>{% for h in headers %}<th>{{ h }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          {% for row in preview_rows %}
+          <tr>{% for v in row %}<td class="small">{{ v }}</td>{% endfor %}</tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  <button type="submit" class="btn btn-primary">Confirm and import</button>
+  <a href="{{ url_for('importer.import_home') }}" class="btn btn-link">Cancel</a>
+</form>
+{% endblock %}

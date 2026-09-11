@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Import Complete{% endblock %}
+{% block content %}
+<h4 class="section-title">Import Complete</h4>
+<div class="alert alert-success">
+  <i class="bi bi-check-circle"></i> {{ imported }} action(s) imported into the register.
+  The original file <code>{{ stored_name }}</code> is preserved unchanged in the import archive.
+</div>
+
+{% if defaulted_rows %}
+<div class="card p-3">
+  <div class="fw-semibold mb-2">Rows imported with default values applied</div>
+  <p class="small text-muted">These rows had a value that didn't match an allowed option, so a safe
+    default was used. Review and correct them in the Action Register if needed.</p>
+  <table class="table table-sm">
+    <thead><tr><th>Source row</th><th>New Action ID</th><th>Fields defaulted</th></tr></thead>
+    <tbody>
+      {% for row_num, action_id, fields in defaulted_rows %}
+      <tr>
+        <td>{{ row_num }}</td>
+        <td><a href="{{ url_for('actions.detail', action_id=action_id) }}">{{ action_id }}</a></td>
+        <td>{{ fields|join(', ') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+<a href="{{ url_for('register.register') }}" class="btn btn-primary mt-3">Go to Action Register</a>
+<a href="{{ url_for('importer.import_home') }}" class="btn btn-link mt-3">Import another file</a>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<h4 class="section-title">Notifications</h4>
+<p class="text-muted small">This is the in-app record of every automated alert (assigned, due soon,
+  overdue, evidence submitted/accepted/rejected, closed). In the Microsoft 365 build, these become
+  Power Automate emails/Teams messages instead.</p>
+
+{% if not notifications %}
+<div class="alert alert-secondary">No notifications yet.</div>
+{% else %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm mb-0">
+      <thead class="table-light"><tr><th>Date</th><th>Event</th><th>Action</th><th>Message</th>{% if session.get('role') in ('Admin','Management') %}<th>Recipient</th>{% endif %}</tr></thead>
+      <tbody>
+        {% for n in notifications %}
+        <tr>
+          <td class="small">{{ n.created_at|dateonly }}</td>
+          <td><span class="badge bg-light text-dark border">{{ n.event_type }}</span></td>
+          <td>{% if n.action_id %}<a href="{{ url_for('actions.detail', action_id=n.action_id) }}">{{ n.action_id }}</a>{% endif %}</td>
+          <td class="small">{{ n.message }}</td>
+          {% if session.get('role') in ('Admin','Management') %}<td class="small">{{ n.recipient }}</td>{% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

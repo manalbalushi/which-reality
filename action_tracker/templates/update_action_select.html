@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "_badges.html" as b %}
+{% block title %}Update Action{% endblock %}
+{% block content %}
+<h4 class="section-title">Update Action</h4>
+<p class="text-muted">Step 1 of 2 — select the Action ID you want to update.</p>
+
+{% if not actions %}
+<div class="alert alert-secondary">No actions available to update.</div>
+{% else %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
+        <tr><th>Action ID</th><th>Title</th><th>Owner</th><th>Status</th><th>Target Date</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for a in actions %}
+        <tr class="{{ 'table-warning' if a.action_id == preselect else '' }}">
+          <td><strong>{{ a.action_id }}</strong></td>
+          <td>{{ a.title }}</td>
+          <td>{{ a.owner }}</td>
+          <td>{{ b.status_badge(a.status) }}</td>
+          <td>{{ a.current_target_date|dateonly }}</td>
+          <td class="text-end">
+            <a href="{{ url_for('actions.update_action', action_id=a.action_id) }}" class="btn btn-sm btn-primary">Select</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

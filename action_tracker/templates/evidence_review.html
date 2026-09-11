@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% import "_badges.html" as b %}
+{% block title %}Evidence Review{% endblock %}
+{% block content %}
+<h4 class="section-title">Evidence Review Queue</h4>
+
+{% if not pending %}
+<div class="alert alert-secondary">Nothing pending review right now.</div>
+{% else %}
+<div class="row g-3">
+  {% for e in pending %}
+  <div class="col-lg-6">
+    <div class="card p-3">
+      <div class="d-flex justify-content-between">
+        <div>
+          <strong>{{ e.evidence_id }}</strong> · {{ e.action_id }} · v{{ e.version }}
+          <div class="text-muted small">{{ e.action_title }}</div>
+        </div>
+        {{ b.evidence_badge(e.evidence_status) }}
+      </div>
+      <div class="mt-2">
+        <div><strong>{{ e.evidence_name }}</strong></div>
+        <div class="small text-muted">{{ e.evidence_type or '-' }} &middot; uploaded by {{ e.uploaded_by }} on {{ e.upload_date|dateonly }}</div>
+        {% if e.description %}<div class="small mt-1">{{ e.description }}</div>{% endif %}
+        {% if e.file_path %}
+        <a class="small" href="{{ url_for('evidence.evidence_file', action_id=e.action_id, filename=e.file_path) }}">Download file</a>
+        {% endif %}
+      </div>
+      <form method="post" action="{{ url_for('evidence.review_decision', evidence_id=e.evidence_id) }}" class="mt-3">
+        <div class="mb-2">
+          <input type="text" class="form-control form-control-sm" name="rejection_reason" placeholder="Rejection reason (required if rejecting)">
+        </div>
+        <button type="submit" name="decision" value="Accepted" class="btn btn-success btn-sm">Accept</button>
+        <button type="submit" name="decision" value="Rejected" class="btn btn-outline-danger btn-sm">Reject</button>
+        <a href="{{ url_for('actions.detail', action_id=e.action_id) }}" class="btn btn-link btn-sm">View action</a>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<h5 class="section-title mt-4">Recently reviewed</h5>
+{% if not recent %}
+<div class="text-muted small">No reviews yet.</div>
+{% else %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm mb-0">
+      <thead class="table-light"><tr><th>Evidence ID</th><th>Action</th><th>Status</th><th>Reviewer</th><th>Review Date</th></tr></thead>
+      <tbody>
+        {% for e in recent %}
+        <tr>
+          <td>{{ e.evidence_id }}</td>
+          <td>{{ e.action_id }} · {{ e.action_title }}</td>
+          <td>{{ b.evidence_badge(e.evidence_status) }}</td>
+          <td>{{ e.reviewer }}</td>
+          <td>{{ e.review_date|dateonly }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

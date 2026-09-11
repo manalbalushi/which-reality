@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% import "_badges.html" as b %}
+{% block title %}Action Register{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h4 class="section-title mb-0">Action Register</h4>
+  <a href="{{ url_for('register.export', **args) }}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-file-earmark-excel"></i> Export to Excel
+  </a>
+</div>
+
+<form method="get" class="card p-3 mb-3">
+  <div class="row g-2">
+    <div class="col-md-3">
+      <input type="search" class="form-control" name="q" placeholder="Search Action ID, title, comment…" value="{{ args.get('q','') }}">
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="owner">
+        <option value="">All owners</option>
+        {% for o in owners %}<option value="{{ o }}" {{ 'selected' if args.get('owner')==o else '' }}>{{ o }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="department">
+        <option value="">All departments</option>
+        {% for d in departments %}<option value="{{ d }}" {{ 'selected' if args.get('department')==d else '' }}>{{ d }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="status">
+        <option value="">All statuses</option>
+        {% for s in statuses %}<option value="{{ s }}" {{ 'selected' if args.get('status')==s else '' }}>{{ s }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="priority">
+        <option value="">All priorities</option>
+        {% for p in priorities %}<option value="{{ p }}" {{ 'selected' if args.get('priority')==p else '' }}>{{ p }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-1">
+      <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i></button>
+    </div>
+  </div>
+  <div class="row g-2 mt-1">
+    <div class="col-md-3">
+      <input type="text" class="form-control" name="source" placeholder="Source / Assessment" value="{{ args.get('source','') }}">
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="evidence_status">
+        <option value="">All evidence statuses</option>
+        {% for es in evidence_statuses %}<option value="{{ es }}" {{ 'selected' if args.get('evidence_status')==es else '' }}>{{ es }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <input type="date" class="form-control" name="target_date_from" value="{{ args.get('target_date_from','') }}" title="Target date from">
+    </div>
+    <div class="col-md-2">
+      <input type="date" class="form-control" name="target_date_to" value="{{ args.get('target_date_to','') }}" title="Target date to">
+    </div>
+    <div class="col-md-2">
+      <a href="{{ url_for('register.register') }}" class="btn btn-outline-secondary w-100">Clear filters</a>
+    </div>
+  </div>
+</form>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th><th>Title</th><th>Owner</th><th>Dept</th><th>Priority</th><th>Status</th>
+          <th>Target Date</th><th>Days Overdue</th><th>Completion</th><th>Evidence</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in actions %}
+        <tr class="{{ 'table-danger' if a.days_overdue > 0 else '' }}">
+          <td><strong>{{ a.action_id }}</strong></td>
+          <td>{{ a.title }}</td>
+          <td>{{ a.owner }}</td>
+          <td>{{ a.department or '-' }}</td>
+          <td>{{ b.priority_badge(a.priority) }}</td>
+          <td>{{ b.status_badge(a.status) }}</td>
+          <td>{{ a.current_target_date|dateonly }}</td>
+          <td>{{ a.days_overdue if a.days_overdue else '-' }}</td>
+          <td>{{ a.completion_pct }}%</td>
+          <td>{{ b.evidence_badge(a.evidence_status) }}</td>
+          <td class="text-end"><a href="{{ url_for('actions.detail', action_id=a.action_id) }}" class="btn btn-sm btn-outline-secondary">View</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="11" class="text-center text-muted py-4">No actions match these filters.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="text-muted small mt-2">{{ actions|length }} action(s) shown.</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% import "_badges.html" as b %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h4 class="section-title mb-0">Management Dashboard</h4>
+  <a href="{{ url_for('register.export') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-excel"></i> Export to Excel</a>
+</div>
+
+<div class="row g-3 mb-3">
+  {% set tiles = [
+    ('Total Actions', kpis.total), ('Completed', kpis.completed), ('In Progress', kpis.in_progress),
+    ('Not Started', kpis.not_started), ('Overdue', kpis.overdue),
+    ('Due Soon (' ~ reminder_days ~ 'd)', kpis.due_soon), ('Pending Validation', kpis.pending_validation),
+    ('Evidence Pending', kpis.evidence_pending), ('Evidence Rejected', kpis.evidence_rejected),
+    ('Completion %', kpis.completion_pct ~ '%')
+  ] %}
+  {% for label, value in tiles %}
+  <div class="col-6 col-md-3 col-lg-2">
+    <div class="card kpi-card">
+      <div class="kpi-value">{{ value }}</div>
+      <div class="kpi-label">{{ label }}</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-6"><div class="card p-3"><div class="fw-semibold mb-2">Actions by Status</div><canvas id="chartStatus" height="200"></canvas></div></div>
+  <div class="col-lg-6"><div class="card p-3"><div class="fw-semibold mb-2">Monthly Completion Trend</div><canvas id="chartTrend" height="200"></canvas></div></div>
+  <div class="col-lg-4"><div class="card p-3"><div class="fw-semibold mb-2">Actions by Owner</div><canvas id="chartOwner" height="220"></canvas></div></div>
+  <div class="col-lg-4"><div class="card p-3"><div class="fw-semibold mb-2">Actions by Department</div><canvas id="chartDept" height="220"></canvas></div></div>
+  <div class="col-lg-4"><div class="card p-3"><div class="fw-semibold mb-2">Actions by Priority</div><canvas id="chartPriority" height="220"></canvas></div></div>
+  <div class="col-lg-12"><div class="card p-3"><div class="fw-semibold mb-2">Actions by Source</div><canvas id="chartSource" height="120"></canvas></div></div>
+</div>
+
+<h5 class="section-title mt-4">Top 10 Overdue Actions</h5>
+{% if not top_overdue %}
+<div class="alert alert-success"><i class="bi bi-check-circle"></i> No overdue actions.</div>
+{% else %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
+        <tr><th>Action ID</th><th>Action</th><th>Owner</th><th>Target Date</th><th>Days Overdue</th><th>Latest Comment</th><th>Evidence Status</th></tr>
+      </thead>
+      <tbody>
+        {% for a in top_overdue %}
+        <tr>
+          <td><a href="{{ url_for('actions.detail', action_id=a.action_id) }}">{{ a.action_id }}</a></td>
+          <td>{{ a.title }}</td>
+          <td>{{ a.owner }}</td>
+          <td>{{ a.current_target_date|dateonly }}</td>
+          <td><span class="badge bg-danger">{{ a.days_overdue }}</span></td>
+          <td class="small">{{ a.latest_comment or '-' }}</td>
+          <td>{{ b.evidence_badge(a.evidence_status) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+const charts = {{ charts_json|safe }};
+const palette = ['#2f81f7','#0f2942','#f59e0b','#10b981','#ef4444','#8b5cf6','#06b6d4','#f97316'];
+
+function bar(id, data, horizontal) {
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels: data.labels, datasets: [{ data: data.data, backgroundColor: palette }] },
+    options: { indexAxis: horizontal ? 'y' : 'x', plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+  });
+}
+
+new Chart(document.getElementById('chartStatus'), {
+  type: 'doughnut',
+  data: { labels: charts.status.labels, datasets: [{ data: charts.status.data, backgroundColor: palette }] },
+});
+
+new Chart(document.getElementById('chartTrend'), {
+  type: 'line',
+  data: { labels: charts.trend.labels, datasets: [{ label: 'Actions closed', data: charts.trend.data, borderColor: '#2f81f7', tension: 0.3, fill: false }] },
+  options: { plugins: { legend: { display: false } } }
+});
+
+bar('chartOwner', charts.owner, true);
+bar('chartDept', charts.department, true);
+bar('chartPriority', charts.priority, false);
+bar('chartSource', charts.source, false);
+</script>
+{% endblock %}

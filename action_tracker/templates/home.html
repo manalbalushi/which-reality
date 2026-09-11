@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="mb-4">
+  <h2 class="section-title">Automated Action Management &amp; Evidence Tracker</h2>
+  <p class="text-muted">Every action, update, comment and piece of evidence is linked by a single Action ID —
+    no more chasing a separate evidence folder or a shared Excel file.</p>
+</div>
+
+{% if not session.get('user_name') %}
+<div class="alert alert-info">
+  <i class="bi bi-info-circle"></i> Please <a href="{{ url_for('main.login') }}">sign in</a> to use the tracker.
+</div>
+{% endif %}
+
+<div class="row g-3">
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('main.my_actions') }}" class="card home-tile h-100">
+      <i class="bi bi-person-check"></i>
+      <div class="fw-semibold">My Actions</div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('actions.update_action_select') }}" class="card home-tile h-100">
+      <i class="bi bi-pencil-square"></i>
+      <div class="fw-semibold">Update Action</div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('evidence.upload_select') }}" class="card home-tile h-100">
+      <i class="bi bi-cloud-upload"></i>
+      <div class="fw-semibold">Upload Evidence</div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('evidence.review_queue') }}" class="card home-tile h-100">
+      <i class="bi bi-clipboard-check"></i>
+      <div class="fw-semibold">Evidence Review</div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('dashboard.dashboard') }}" class="card home-tile h-100">
+      <i class="bi bi-bar-chart"></i>
+      <div class="fw-semibold">Dashboard</div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('register.register') }}" class="card home-tile h-100">
+      <i class="bi bi-table"></i>
+      <div class="fw-semibold">Action Register</div>
+    </a>
+  </div>
+</div>
+
+<div class="row mt-4 g-3">
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <div class="fw-semibold mb-1"><i class="bi bi-1-circle"></i> Owners update, not Excel</div>
+      <div class="text-muted small">Owners select their Action ID and submit a 1–2 minute update. The
+        register updates itself — history is kept, never overwritten.</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <div class="fw-semibold mb-1"><i class="bi bi-2-circle"></i> Evidence stays linked</div>
+      <div class="text-muted small">Every file is tied to its Action ID with a reviewer sign-off trail —
+        accepted, rejected, or resubmitted, nothing is lost.</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <div class="fw-semibold mb-1"><i class="bi bi-3-circle"></i> Management sees it live</div>
+      <div class="text-muted small">The dashboard and register always reflect the latest state — no
+        waiting on the next manual roll-up.</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
